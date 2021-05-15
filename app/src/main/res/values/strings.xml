@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">whackamole</string>
+    <string name="str_button_cancel">CANCEL</string>
+    <string name="str_log_in">Log in</string>
+    <string name="str_sign_up">Sign up</string>
+    <string name="str_button_accept">ACCEPT</string>
+    <string name="str_button_start">START GAME</string>
+    <string name="str_button_options">OPTIONS</string>
+    <string name="str_button_scores">CHAMPIONS</string>
+    <string name="str_text_title">Whack A Mole!</string>
+    <string name="str_button_register">I already have an account</string>
+    <string name="str_button_login">Get Started</string>
+</resources>
