@@ -10,125 +10,125 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         android:background="@color/grass"
-        tools:context=".game.EndGameActivity">
+        tools:context=".game.OptionsActivity">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:weightSum="4">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:orientation="vertical"-->
+<!--            android:gravity="center"-->
+<!--            android:weightSum="4">-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:weightSum="2">
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:gravity="center"-->
+<!--                android:layout_weight="1"-->
+<!--                android:weightSum="2">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:text="@string/str_game_over"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:id="@+id/gameOver"
-                    android:textSize="30sp"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:text="@string/str_game_over"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:id="@+id/gameOver"-->
+<!--                    android:textSize="30sp"/>-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:id="@+id/mReasonDisplay"
-                    android:textSize="25sp"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:id="@+id/mReasonDisplay"-->
+<!--                    android:textSize="25sp"/>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="2"
-                android:layout_gravity="center_horizontal">
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center"-->
+<!--                android:weightSum="2"-->
+<!--                android:layout_gravity="center_horizontal">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="@string/str_your_score"
-                    android:gravity="center"
-                    android:id="@+id/ScoreField"
-                    android:textSize="25sp"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="@string/str_your_score"-->
+<!--                    android:gravity="center"-->
+<!--                    android:id="@+id/ScoreField"-->
+<!--                    android:textSize="25sp"/>-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:id="@+id/mScoreValue"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:textSize="25sp"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:id="@+id/mScoreValue"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:textSize="25sp"/>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="2">
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center"-->
+<!--                android:weightSum="2">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:text="@string/str_name_entry"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:id="@+id/nameField"
-                    android:textSize="25sp"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:text="@string/str_name_entry"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:id="@+id/nameField"-->
+<!--                    android:textSize="25sp"/>-->
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:inputType="text"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:id="@+id/mNameEntry"
-                    android:textSize="25sp"/>
+<!--                <EditText-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:inputType="text"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:id="@+id/mNameEntry"-->
+<!--                    android:textSize="25sp"/>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:weightSum="3">
+<!--            <LinearLayout-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_weight="1"-->
+<!--                android:gravity="center"-->
+<!--                android:weightSum="3">-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/str_button_submit"
-                    android:id="@+id/button_Submit"/>
+<!--                <Button-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="@string/str_button_submit"-->
+<!--                    android:id="@+id/button_Submit"/>-->
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/str_button_main"
-                    android:id="@+id/button_Menu"/>
+<!--                <Button-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="center"-->
+<!--                    android:text="@string/str_button_main"-->
+<!--                    android:id="@+id/button_Menu"/>-->
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
     </RelativeLayout>

@@ -58,8 +58,8 @@ public class StartGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game);
 
-        mTimeView = (TextView) findViewById(R.id.textTimeVal);
-        mScoreView = (TextView) findViewById(R.id.textScoreVal);
+//        mTimeView = (TextView) findViewById(R.id.textTimeVal);
+//        mScoreView = (TextView) findViewById(R.id.textScoreVal);
 
         // Get saved difficulty, default to Medium if no pref exists
         final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
@@ -71,8 +71,8 @@ public class StartGameActivity extends AppCompatActivity {
 
         varClose = false;
 
-        mPlayerWhack = MediaPlayer.create(getApplicationContext(), R.raw.whack);
-        mPlayerMiss = MediaPlayer.create(getApplicationContext(), R.raw.miss);
+//        mPlayerWhack = MediaPlayer.create(getApplicationContext(), R.raw.whack);
+//        mPlayerMiss = MediaPlayer.create(getApplicationContext(), R.raw.miss);
 
         molesClick [0] = (ImageView) findViewById(R.id.imageMole1);
         molesClick [1] = (ImageView) findViewById(R.id.imageMole2);
@@ -143,14 +143,14 @@ public class StartGameActivity extends AppCompatActivity {
         // Called when the timer finishes
         public void onFinish() {
 
-            // Call endgame class and pass score, reason (due to time out)
-            this.cancel();
-            String messageTime = getString(R.string.str_end_time);
-            EndGame(varScore, messageTime);
-
-            // Reset difficulty vars
-            timeInterval = 1000;
-            moleUpTime = 350;
+//            // Call endgame class and pass score, reason (due to time out)
+//            this.cancel();
+//            String messageTime = getString(R.string.str_end_time);
+//            EndGame(varScore, messageTime);
+//
+//            // Reset difficulty vars
+//            timeInterval = 1000;
+//            moleUpTime = 350;
 
         }
 
@@ -171,32 +171,33 @@ public class StartGameActivity extends AppCompatActivity {
     // Functions to incrementally increase difficulty
     public void increaseDifficulty(){
 
-        String diff1 = getString(R.string.diff1);
-        String diff3 = getString(R.string.diff3);
+//        String diff1 = getString(R.string.diff1);
+//        String diff3 = getString(R.string.diff3);
 
         // When difficulty increase is called, decrease time between moles, and surface time by
         // an amount based on the current difficulty
-        if (currentDiff.equals(diff1)){
-            timeInterval *= 0.99;
-            moleUpTime *= 0.99;
-        } else if (currentDiff.equals(diff3)) {
-            timeInterval *= 0.90;
-            moleUpTime *= 0.90;
-        } else {
-            timeInterval *= 0.95;
-            moleUpTime *= 0.95;
-        }
+//        if (currentDiff.equals(diff1)){
+//            timeInterval *= 0.99;
+//            moleUpTime *= 0.99;
+//        } else if (currentDiff.equals(diff3)) {
+//            timeInterval *= 0.90;
+//            moleUpTime *= 0.90;
+//        } else {
+//            timeInterval *= 0.95;
+//            moleUpTime *= 0.95;
+//        }
 
     }
 
     // End the game! Extras passed are our final score, and the reason the game is over
     public void EndGame(int EndScore, String Reason) {
 
-        Intent intent = new Intent(getApplicationContext(), EndActivity.class);
-        intent.putExtra("score", EndScore);
-        intent.putExtra("reason", Reason);
-
-        mTimer.cancel();
+        // colocar mensaje push
+        Intent intent = new Intent(getApplicationContext(), MenuGameActivity.class);
+//        intent.putExtra("score", EndScore);
+//        intent.putExtra("reason", Reason);
+//
+//        mTimer.cancel();
         startActivity(intent);
         this.finish();
 
@@ -270,63 +271,63 @@ public class StartGameActivity extends AppCompatActivity {
     // Handling our life indicators
     public void updateLives(int Lives){
 
-        final ImageView heart1= (ImageView) findViewById(R.id.imageHeart1);
-        final ImageView heart2= (ImageView) findViewById(R.id.imageHeart2);
-        final ImageView heart3= (ImageView) findViewById(R.id.imageHeart3);
-        final ImageView heart4= (ImageView) findViewById(R.id.imageHeart4);
-        final ImageView heart5= (ImageView) findViewById(R.id.imageHeart5);
-
-        // Start taking off lives, when none are left, call our game end method
-        if (Lives == 4){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (heart5 != null){
-                        heart5.setImageResource(R.drawable.placeholder_heart_empty);
-                    }
-                }
-            });
-        } else if (Lives == 3){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (heart4 != null) {
-                        heart4.setImageResource(R.drawable.placeholder_heart_empty);
-                    }
-                }
-            });
-        } else if (Lives == 2) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (heart3 != null){
-                        heart3.setImageResource(R.drawable.placeholder_heart_empty);
-                    }
-                }
-            });
-        } else if (Lives == 1){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (heart2 != null) {
-                        heart2.setImageResource(R.drawable.placeholder_heart_empty);
-                    }
-                }
-            });
-        } else if (Lives == 0){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (heart1 != null) {
-                        heart1.setImageResource(R.drawable.placeholder_heart_empty);
-                    }
-                }
-            });
-            String messageLives = getString(R.string.str_end_lives);
-            if (!varClose) {
-                EndGame(varScore, messageLives);
-            }
-        }
+//        final ImageView heart1= (ImageView) findViewById(R.id.imageHeart1);
+//        final ImageView heart2= (ImageView) findViewById(R.id.imageHeart2);
+//        final ImageView heart3= (ImageView) findViewById(R.id.imageHeart3);
+//        final ImageView heart4= (ImageView) findViewById(R.id.imageHeart4);
+//        final ImageView heart5= (ImageView) findViewById(R.id.imageHeart5);
+//
+//        // Start taking off lives, when none are left, call our game end method
+//        if (Lives == 4){
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (heart5 != null){
+//                        heart5.setImageResource(R.drawable.placeholder_heart_empty);
+//                    }
+//                }
+//            });
+//        } else if (Lives == 3){
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (heart4 != null) {
+//                        heart4.setImageResource(R.drawable.placeholder_heart_empty);
+//                    }
+//                }
+//            });
+//        } else if (Lives == 2) {
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (heart3 != null){
+//                        heart3.setImageResource(R.drawable.placeholder_heart_empty);
+//                    }
+//                }
+//            });
+//        } else if (Lives == 1){
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (heart2 != null) {
+//                        heart2.setImageResource(R.drawable.placeholder_heart_empty);
+//                    }
+//                }
+//            });
+//        } else if (Lives == 0){
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (heart1 != null) {
+//                        heart1.setImageResource(R.drawable.placeholder_heart_empty);
+//                    }
+//                }
+//            });
+//            String messageLives = getString(R.string.str_end_lives);
+//            if (!varClose) {
+//                EndGame(varScore, messageLives);
+//            }
+//        }
 
     }
 
@@ -412,12 +413,12 @@ public class StartGameActivity extends AppCompatActivity {
             mPlayerWhack.release();
         }
 
-        mPlayerWhack = MediaPlayer.create(getApplicationContext(), R.raw.whack);
-        mPlayerWhack.start();
-
-        // Award points, update score
-        varScore += 250;
-        updateScore(varScore);
+//        mPlayerWhack = MediaPlayer.create(getApplicationContext(), R.raw.whack);
+//        mPlayerWhack.start();
+//
+//        // Award points, update score
+//        varScore += 250;
+//        updateScore(varScore);
     }
 }
 
