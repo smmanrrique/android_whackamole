@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.whackamole.R;
@@ -22,19 +23,25 @@ import java.util.TimerTask;
 
 public class StartGameActivity extends AppCompatActivity {
 
+    // Declaring TextView
+    private TextView showTime;
+    private TextView showScore;
+
+    // Game Time
+    private int maxTime = 60 * 1000;
+    // This is our game length (seconds as a function of millis)
+    // Leaving redundant calc which enables seconds to be set using some logic/prefs
+    private long stepTime = 1 * 1000;
+
+    static final int MIN_AGE = 18;
+
     // Relatively static initial declarations
     int varRandMole;
-    private TextView mTimeView;
-    private TextView mScoreView;
     public int varScore = 0;
-    private int varLives = 5;
     final Handler handler = new Handler();
     public boolean varClose = false;
 
-    // This is our game length (seconds as a function of millis)
-    private int maxTime = 60 * 1000;
-    // Leaving redundant calc which enables seconds to be set using some logic/prefs
-    private long stepTime = 1 * 1000;
+
 
     // This is our delay per mole popping up (difficulty)
     public int timeInterval = 1000;
@@ -58,8 +65,9 @@ public class StartGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game);
 
-//        mTimeView = (TextView) findViewById(R.id.textTimeVal);
-//        mScoreView = (TextView) findViewById(R.id.textScoreVal);
+        //
+        showTime = (TextView) findViewById(R.id.textShowTime);
+        showScore = (TextView) findViewById(R.id.textShowScore);
 
         // Get saved difficulty, default to Medium if no pref exists
         final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
@@ -71,8 +79,8 @@ public class StartGameActivity extends AppCompatActivity {
 
         varClose = false;
 
-//        mPlayerWhack = MediaPlayer.create(getApplicationContext(), R.raw.whack);
-//        mPlayerMiss = MediaPlayer.create(getApplicationContext(), R.raw.miss);
+        mPlayerWhack = MediaPlayer.create(getApplicationContext(), R.raw.hitted);
+        mPlayerMiss = MediaPlayer.create(getApplicationContext(), R.raw.missed);
 
         molesClick [0] = (ImageView) findViewById(R.id.imageMole1);
         molesClick [1] = (ImageView) findViewById(R.id.imageMole2);
@@ -93,12 +101,6 @@ public class StartGameActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Some android specific class methods to better handle some back-behaviour
-     * such as stopping game sounds and the async timer when user navigates away from the main game.
-     * Using a boolean to determine tell the logic whether activity is running or not (I can't
-     * believe there isn't a better way of doing this).
-     */
 
     @Override
     public void onPause() {
@@ -136,29 +138,26 @@ public class StartGameActivity extends AppCompatActivity {
     public class myTimer extends CountDownTimer {
         public myTimer(int maxTime, long stepTime) {
             super(maxTime, stepTime);
-
         }
-        @Override
 
+        @Override
         // Called when the timer finishes
         public void onFinish() {
+            // Call endgame class and pass score, reason (due to time out)
+            this.cancel();
+            String messageTime = getString(R.string.str_show_time);
+            EndGame(varScore, messageTime);
 
-//            // Call endgame class and pass score, reason (due to time out)
-//            this.cancel();
-//            String messageTime = getString(R.string.str_end_time);
-//            EndGame(varScore, messageTime);
-//
-//            // Reset difficulty vars
-//            timeInterval = 1000;
-//            moleUpTime = 350;
+            // Reset difficulty vars
+            timeInterval = 1000;
+            moleUpTime = 350;
 
         }
 
         // Ticker called every x millis until done
         public void onTick(long millisUntilFinished) {
-
             // Using to set the time value every second (1000ms)
-            mTimeView.setText(String.valueOf(millisUntilFinished / 1000));
+            showTime.setText(String.valueOf(millisUntilFinished / 1000));
 
             // Ramp the difficulty up every 5 seconds
             if (((millisUntilFinished/1000)%5 == 0) && (millisUntilFinished/1000) != 60){
@@ -171,21 +170,21 @@ public class StartGameActivity extends AppCompatActivity {
     // Functions to incrementally increase difficulty
     public void increaseDifficulty(){
 
-//        String diff1 = getString(R.string.diff1);
-//        String diff3 = getString(R.string.diff3);
+        String diff1 = getString(R.string.level1);
+        String diff3 = getString(R.string.level3);
 
-        // When difficulty increase is called, decrease time between moles, and surface time by
-        // an amount based on the current difficulty
-//        if (currentDiff.equals(diff1)){
-//            timeInterval *= 0.99;
-//            moleUpTime *= 0.99;
-//        } else if (currentDiff.equals(diff3)) {
-//            timeInterval *= 0.90;
-//            moleUpTime *= 0.90;
-//        } else {
-//            timeInterval *= 0.95;
-//            moleUpTime *= 0.95;
-//        }
+//         When difficulty increase is called, decrease time between moles, and surface time by
+//         an amount based on the current difficulty
+        if (currentDiff.equals(diff1)){
+            timeInterval *= 0.99;
+            moleUpTime *= 0.99;
+        } else if (currentDiff.equals(diff3)) {
+            timeInterval *= 0.90;
+            moleUpTime *= 0.90;
+        } else {
+            timeInterval *= 0.95;
+            moleUpTime *= 0.95;
+        }
 
     }
 
@@ -196,8 +195,8 @@ public class StartGameActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MenuGameActivity.class);
 //        intent.putExtra("score", EndScore);
 //        intent.putExtra("reason", Reason);
-//
-//        mTimer.cancel();
+
+        mTimer.cancel();
         startActivity(intent);
         this.finish();
 
@@ -252,10 +251,6 @@ public class StartGameActivity extends AppCompatActivity {
                                 }
                                 mPlayerMiss.start();
 
-                                // Deduct a life if we miss a mole
-                                varLives -= 1;
-                                updateLives(varLives);
-
                             }
                         }
                     }
@@ -268,82 +263,19 @@ public class StartGameActivity extends AppCompatActivity {
         }
     };
 
-    // Handling our life indicators
-    public void updateLives(int Lives){
-
-//        final ImageView heart1= (ImageView) findViewById(R.id.imageHeart1);
-//        final ImageView heart2= (ImageView) findViewById(R.id.imageHeart2);
-//        final ImageView heart3= (ImageView) findViewById(R.id.imageHeart3);
-//        final ImageView heart4= (ImageView) findViewById(R.id.imageHeart4);
-//        final ImageView heart5= (ImageView) findViewById(R.id.imageHeart5);
-//
-//        // Start taking off lives, when none are left, call our game end method
-//        if (Lives == 4){
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (heart5 != null){
-//                        heart5.setImageResource(R.drawable.placeholder_heart_empty);
-//                    }
-//                }
-//            });
-//        } else if (Lives == 3){
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (heart4 != null) {
-//                        heart4.setImageResource(R.drawable.placeholder_heart_empty);
-//                    }
-//                }
-//            });
-//        } else if (Lives == 2) {
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (heart3 != null){
-//                        heart3.setImageResource(R.drawable.placeholder_heart_empty);
-//                    }
-//                }
-//            });
-//        } else if (Lives == 1){
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (heart2 != null) {
-//                        heart2.setImageResource(R.drawable.placeholder_heart_empty);
-//                    }
-//                }
-//            });
-//        } else if (Lives == 0){
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (heart1 != null) {
-//                        heart1.setImageResource(R.drawable.placeholder_heart_empty);
-//                    }
-//                }
-//            });
-//            String messageLives = getString(R.string.str_end_lives);
-//            if (!varClose) {
-//                EndGame(varScore, messageLives);
-//            }
-//        }
-
-    }
 
     // Updates score text field
     public void updateScore(int Score){
-        mScoreView.setText(String.valueOf(Score));
+        showScore.setText(String.valueOf(Score));
     }
 
     // OnClick function for mole objects when we hit them
     public void onClick(View v) {
 
         // Show hit-reg for testing
-
-        //         Toast.makeText(v.getContext(),
-        //                "Hit Registered",
-        //                Toast.LENGTH_LONG).show();
+         Toast.makeText(v.getContext(),
+                "Hit Registered",
+                Toast.LENGTH_LONG).show();
 
         // Switch statement to find the right mole and pop him down
         switch(v.getId()) {
@@ -413,12 +345,12 @@ public class StartGameActivity extends AppCompatActivity {
             mPlayerWhack.release();
         }
 
-//        mPlayerWhack = MediaPlayer.create(getApplicationContext(), R.raw.whack);
-//        mPlayerWhack.start();
-//
-//        // Award points, update score
-//        varScore += 250;
-//        updateScore(varScore);
+        mPlayerWhack = MediaPlayer.create(getApplicationContext(), R.raw.hitted);
+        mPlayerWhack.start();
+
+        // Award points, update score
+        varScore += 250;
+        updateScore(varScore);
     }
 }
 

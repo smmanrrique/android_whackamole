@@ -10,4 +10,14 @@
     <string name="str_text_title">Whack A Mole!</string>
     <string name="str_button_register">I already have an account</string>
     <string name="str_button_login">Get Started</string>
+    <string name="str_title_time">Time:</string>
+    <string name="str_show_time">showT</string>
+    <string name="str_title_score">Score:</string>
+    <string name="str_show_score">showS</string>
+
+
+    <!-- LEVEL GAME -->
+    <string name="level1">Easy</string>
+    <string name="level2">Medium</string>
+    <string name="level3">Hard</string>
 </resources>
