@@ -23,17 +23,19 @@ import java.util.TimerTask;
 
 public class StartGameActivity extends AppCompatActivity {
 
+    static final int MILLIS_TIME = 1000;
+    
     // Declaring TextView
     private TextView showTime;
     private TextView showScore;
 
-    // Game Time
-    private int maxTime = 60 * 1000;
-    // This is our game length (seconds as a function of millis)
-    // Leaving redundant calc which enables seconds to be set using some logic/prefs
-    private long stepTime = 1 * 1000;
+    // Variables to music game
+    public MediaPlayer mPlayerWhack;
+    public MediaPlayer mPlayerMiss;
 
-    static final int MIN_AGE = 18;
+    // Game Time in millis
+    public int maxTime = 60 * MILLIS_TIME;
+    public long stepTime = 1 * MILLIS_TIME;
 
     // Relatively static initial declarations
     int varRandMole;
@@ -41,21 +43,17 @@ public class StartGameActivity extends AppCompatActivity {
     final Handler handler = new Handler();
     public boolean varClose = false;
 
-
-
     // This is our delay per mole popping up (difficulty)
-    public int timeInterval = 1000;
+    public int timeInterval = MILLIS_TIME;
     // This is the time a mole spends above ground (difficulty)
-    public int moleUpTime = 350;
+    public int gopherWaitTime = 300;
 
     // Main game countdown
     public CountDownTimer mTimer = new myTimer(maxTime, stepTime);
 
-    public MediaPlayer mPlayerWhack;
-    public MediaPlayer mPlayerMiss;
+
 
     public String currentDiff;
-
     public ImageView molesClick [] = new ImageView [9];
 
     public int yValue;
@@ -150,7 +148,7 @@ public class StartGameActivity extends AppCompatActivity {
 
             // Reset difficulty vars
             timeInterval = 1000;
-            moleUpTime = 350;
+            gopherWaitTime = 300;
 
         }
 
@@ -177,13 +175,13 @@ public class StartGameActivity extends AppCompatActivity {
 //         an amount based on the current difficulty
         if (currentDiff.equals(diff1)){
             timeInterval *= 0.99;
-            moleUpTime *= 0.99;
+            gopherWaitTime *= 0.99;
         } else if (currentDiff.equals(diff3)) {
             timeInterval *= 0.90;
-            moleUpTime *= 0.90;
+            gopherWaitTime *= 0.90;
         } else {
             timeInterval *= 0.95;
-            moleUpTime *= 0.95;
+            gopherWaitTime *= 0.95;
         }
 
     }
@@ -222,7 +220,7 @@ public class StartGameActivity extends AppCompatActivity {
             varPrevRandMole = varRandMole;
 
             // Pop the mole up
-            molesClick[varRandMole].animate().translationY(yValue).setDuration(moleUpTime);
+            molesClick[varRandMole].animate().translationY(yValue).setDuration(gopherWaitTime);
 
             // Timer to pop our mole back down if player fails to hit it
             new Timer().schedule(new TimerTask() {
@@ -349,7 +347,7 @@ public class StartGameActivity extends AppCompatActivity {
         mPlayerWhack.start();
 
         // Award points, update score
-        varScore += 250;
+        varScore += 100;
         updateScore(varScore);
     }
 }
