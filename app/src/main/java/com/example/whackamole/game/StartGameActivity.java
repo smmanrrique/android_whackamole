@@ -1,5 +1,6 @@
 package com.example.whackamole.game;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,12 +20,13 @@ import com.example.whackamole.R;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Logger;
 
 
 public class StartGameActivity extends AppCompatActivity {
 
-    static final int MILLIS_TIME = 1000;
-    
+    private final static Logger LOGGER = Logger.getLogger(StartGameActivity.class.getName());
+
     // Declaring TextView
     private TextView showTime;
     private TextView showScore;
@@ -34,220 +36,158 @@ public class StartGameActivity extends AppCompatActivity {
     public MediaPlayer mPlayerMiss;
 
     // Game Time in millis
+    static final int MILLIS_TIME = 1000;
+    static final int GOPHER_WAIT_TIME = 300;
+    static final int TRANSLATION_DURATION = 30;
     public int maxTime = 60 * MILLIS_TIME;
     public long stepTime = 1 * MILLIS_TIME;
 
     // Relatively static initial declarations
-    int varRandMole;
-    public int varScore = 0;
+    public int numHole;
+    public int gameScore = 0;
+    public int gameLive = 5;
+    public boolean flagEndGame = false;
     final Handler handler = new Handler();
-    public boolean varClose = false;
 
     // This is our delay per mole popping up (difficulty)
     public int timeInterval = MILLIS_TIME;
-    // This is the time a mole spends above ground (difficulty)
-    public int gopherWaitTime = 300;
+    public int gopherWaitTime = GOPHER_WAIT_TIME;
 
-    // Main game countdown
-    public CountDownTimer mTimer = new myTimer(maxTime, stepTime);
+    public CountDownTimer matchTimer = new gameTimer(maxTime, stepTime); // countdown function game
 
+    public String gameLevel;
+    public ImageView[] gopherHole;
 
-
-    public String currentDiff;
-    public ImageView molesClick [] = new ImageView [9];
-
-    public int yValue;
+    public int yPixelCoordinate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game);
 
-        //
+        // Get game difficulty Level
+        final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        gameLevel = sharedPref.getString("difficulty_level", "Easy");
+
         showTime = (TextView) findViewById(R.id.textShowTime);
         showScore = (TextView) findViewById(R.id.textShowScore);
+        showScore.setText(String.valueOf(gameScore));
 
-        // Get saved difficulty, default to Medium if no pref exists
-        final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        currentDiff = sharedPref.getString("saved_difficulty", "Medium");
 
-        // Start the game!
-        mTimer.start();
-        handler.post(moleLoop);
+        // Start the game
+        matchTimer.start();
+        handler.post(gameLoop);
 
-        varClose = false;
-
+        flagEndGame = false;
         mPlayerWhack = MediaPlayer.create(getApplicationContext(), R.raw.hitted);
         mPlayerMiss = MediaPlayer.create(getApplicationContext(), R.raw.missed);
 
-        molesClick [0] = (ImageView) findViewById(R.id.imageMole1);
-        molesClick [1] = (ImageView) findViewById(R.id.imageMole2);
-        molesClick [2] = (ImageView) findViewById(R.id.imageMole3);
-        molesClick [3] = (ImageView) findViewById(R.id.imageMole4);
-        molesClick [4] = (ImageView) findViewById(R.id.imageMole5);
-        molesClick [5] = (ImageView) findViewById(R.id.imageMole6);
-        molesClick [6] = (ImageView) findViewById(R.id.imageMole7);
-        molesClick [7] = (ImageView) findViewById(R.id.imageMole8);
-        molesClick [8] = (ImageView) findViewById(R.id.imageMole9);
+        gopherHole  = setImages(); // Start images
 
+        // Getting  Screen metrics
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        // Scale mole translation based on device dimensions
-        int sHeight = metrics.heightPixels;
-        yValue = (sHeight/12)*-1;
+        yPixelCoordinate = ((int) metrics.heightPixels/12)*-1;
 
     }
 
+    public ImageView[] setImages(){
+        // returning  ImageView array
+        return new ImageView[] {findViewById(R.id.imageMole1),findViewById(R.id.imageMole2),
+                findViewById(R.id.imageMole3), findViewById(R.id.imageMole4),
+                findViewById(R.id.imageMole5),findViewById(R.id.imageMole6),
+                findViewById(R.id.imageMole7),findViewById(R.id.imageMole8),
+                findViewById(R.id.imageMole9)};
+    }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        varClose = true;
-        mTimer.cancel();
+        flagEndGame = true;
+        matchTimer.cancel();
 
         mPlayerWhack.stop();
         mPlayerMiss.stop();
 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        varClose = true;
-        mTimer.cancel();
-
-        mPlayerWhack.stop();
-        mPlayerMiss.stop();
-
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-
-        varClose = false;
-
-    }
-
-    // Public timer class which is handling the game clock
-    public class myTimer extends CountDownTimer {
-        public myTimer(int maxTime, long stepTime) {
-            super(maxTime, stepTime);
-        }
+    public class gameTimer extends CountDownTimer { // game clock
+        public gameTimer(int maxTime, long stepTime) { super(maxTime, stepTime);}
 
         @Override
-        // Called when the timer finishes
         public void onFinish() {
-            // Call endgame class and pass score, reason (due to time out)
             this.cancel();
-            String messageTime = getString(R.string.str_show_time);
-            EndGame(varScore, messageTime);
-
-            // Reset difficulty vars
-            timeInterval = 1000;
-            gopherWaitTime = 300;
+            EndGame(gameScore, getString(R.string.str_show_time));
 
         }
 
-        // Ticker called every x millis until done
         public void onTick(long millisUntilFinished) {
-            // Using to set the time value every second (1000ms)
-            showTime.setText(String.valueOf(millisUntilFinished / 1000));
+            int currentTime = (int) (millisUntilFinished / MILLIS_TIME);
+            showTime.setText(String.valueOf(currentTime)); // update gameTime
 
-            // Ramp the difficulty up every 5 seconds
-            if (((millisUntilFinished/1000)%5 == 0) && (millisUntilFinished/1000) != 60){
-                increaseDifficulty();
+            if ((currentTime%5 == 0) &&  (currentTime != 60)){
+                switch(gameLevel) {
+                    case "Easy":
+                        timeInterval *= 0.99;
+                        gopherWaitTime *= 0.99;
+                    case "Medium":
+                        timeInterval *= 0.95;
+                        gopherWaitTime *= 0.95;
+                    case "Hard":
+                        timeInterval *= 0.90;
+                        gopherWaitTime *= 0.90;
+                }
             }
 
         }
     }
 
-    // Functions to incrementally increase difficulty
-    public void increaseDifficulty(){
 
-        String diff1 = getString(R.string.level1);
-        String diff3 = getString(R.string.level3);
 
-//         When difficulty increase is called, decrease time between moles, and surface time by
-//         an amount based on the current difficulty
-        if (currentDiff.equals(diff1)){
-            timeInterval *= 0.99;
-            gopherWaitTime *= 0.99;
-        } else if (currentDiff.equals(diff3)) {
-            timeInterval *= 0.90;
-            gopherWaitTime *= 0.90;
-        } else {
-            timeInterval *= 0.95;
-            gopherWaitTime *= 0.95;
-        }
+    public void EndGame(int EndScore, String Reason) {     // Push message End the game!
+        System.out.println("void EndGame(int EndScore, String Reason)");
+        System.out.println("void EndGame(int EndScore, String Reason)");
+        MessageGameActivity msmPush = new MessageGameActivity();
 
-    }
-
-    // End the game! Extras passed are our final score, and the reason the game is over
-    public void EndGame(int EndScore, String Reason) {
-
-        // colocar mensaje push
         Intent intent = new Intent(getApplicationContext(), MenuGameActivity.class);
 //        intent.putExtra("score", EndScore);
 //        intent.putExtra("reason", Reason);
-
-        mTimer.cancel();
+        matchTimer.cancel();
         startActivity(intent);
         this.finish();
 
     }
 
     // Game loop is a runnable which calls itself every timeInterval (millis)
-    public Runnable moleLoop = new Runnable() {
+    public Runnable gameLoop = new Runnable() {
 
-        int varPrevRandMole = 10;
+        int prevHole = 10;
 
         @Override
         public void run () {
+            numHole = new Random().nextInt(8);
+            LOGGER.info("Select new hole ---> "+ String.valueOf(numHole));
 
-            // Pick a mole at random, if you get the same twice, re-roll until it's different
-            varRandMole = new Random().nextInt(8);
+            // Gopher up
+            gopherHole[numHole].animate().translationY(yPixelCoordinate).setDuration(gopherWaitTime);
 
-            if (varRandMole == varPrevRandMole){
-                do
-                    varRandMole = new Random().nextInt(8);
-                while (varRandMole == varPrevRandMole);
-            }
-
-            varPrevRandMole = varRandMole;
-
-            // Pop the mole up
-            molesClick[varRandMole].animate().translationY(yValue).setDuration(gopherWaitTime);
-
-            // Timer to pop our mole back down if player fails to hit it
+            // Hide gopher
             new Timer().schedule(new TimerTask() {
                 public void run() {
-
-                    if (!varClose) {
-
+                    if (!flagEndGame) {
                         for (int i = 0; i < 9; i++) {
-                            if (molesClick[i].getTranslationY() == yValue) {
-
+                            if (gopherHole[i].getTranslationY() == yPixelCoordinate) {
                                 final int j = i;
-
-                                // Sets the mole back to its beginning position
-                                // run this update on the UI thread as we need a "looper" thread
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        molesClick[j].animate().translationY(0).setDuration(5);
+                                        gopherHole[j].animate().translationY(0).setDuration(5);
                                     }
                                 });
-
-                                if (mPlayerMiss.isPlaying() && mPlayerMiss != null) {
-                                    mPlayerMiss.stop();
-                                    mPlayerMiss.reset();
-                                    mPlayerMiss.release();
-                                }
                                 mPlayerMiss.start();
+                                gameLive -= 1;
+                                updateLives(gameLive);
 
                             }
                         }
@@ -255,79 +195,81 @@ public class StartGameActivity extends AppCompatActivity {
                 }
             }, timeInterval);
 
-            if (!varClose) {
-                handler.postDelayed(moleLoop, timeInterval);
+            if (!flagEndGame) {
+                handler.postDelayed(gameLoop, timeInterval);
             }
         }
     };
 
 
-    // Updates score text field
-    public void updateScore(int Score){
+    public void updateScore(int Score){ // Updates score text field
         showScore.setText(String.valueOf(Score));
     }
 
-    // OnClick function for mole objects when we hit them
-    public void onClick(View v) {
+    public void updateLives(int lives){ // Updates score text field
+        showScore.setText(String.valueOf(lives));
+    }
 
-        // Show hit-reg for testing
+
+
+    public void onClick(View v) { //  hit gopher
+        // display message
          Toast.makeText(v.getContext(),
                 "Hit Registered",
                 Toast.LENGTH_LONG).show();
 
-        // Switch statement to find the right mole and pop him down
         switch(v.getId()) {
             case R.id.imageMole1:
-                if (molesClick[0].getTranslationY() < 0) {
-                    molesClick[0].animate().translationY(0).setDuration(20);
+                if (gopherHole[0].getTranslationY() < 0) {
+                    gopherHole[0].animate().translationY(0).setDuration(TRANSLATION_DURATION);
                     directHit();
                 }
                 break;
             case R.id.imageMole2:
-                if (molesClick[1].getTranslationY() < 0) {
-                    molesClick[1].animate().translationY(0).setDuration(20);
+                if (gopherHole[1].getTranslationY() < 0) {
+                    gopherHole[1].animate().translationY(0).setDuration(TRANSLATION_DURATION);
                     directHit();
                 }
                 break;
             case R.id.imageMole3:
-                if (molesClick[2].getTranslationY() < 0) {
-                    molesClick[2].animate().translationY(0).setDuration(20);
+                if (gopherHole[2].getTranslationY() < 0) {
+                    gopherHole[2].animate().translationY(0).setDuration(TRANSLATION_DURATION);
                     directHit();
                 }
                 break;
             case R.id.imageMole4:
-                if (molesClick[3].getTranslationY() < 0) {
-                    molesClick[3].animate().translationY(0).setDuration(20);
+                if (gopherHole[3].getTranslationY() < 0) {
+                    gopherHole[3].animate().translationY(0).setDuration(TRANSLATION_DURATION);
                     directHit();
                 }
                 break;
             case R.id.imageMole5:
-                if (molesClick[4].getTranslationY() < 0) {
-                    molesClick[4].animate().translationY(0).setDuration(20);
+                if (gopherHole[4].getTranslationY() < 0) {
+                    gopherHole[4].animate().translationY(0).setDuration(TRANSLATION_DURATION);
                     directHit();
                 }
                 break;
             case R.id.imageMole6:
-                if (molesClick[5].getTranslationY() < 0) {
-                    molesClick[5].animate().translationY(0).setDuration(20);
+                if (gopherHole[5].getTranslationY() < 0) {
+                    gopherHole[5].animate().translationY(0).setDuration(TRANSLATION_DURATION);
                     directHit();
                 }
                 break;
             case R.id.imageMole7:
-                if (molesClick[6].getTranslationY() < 0) {
-                    molesClick[6].animate().translationY(0).setDuration(20);
+                if (gopherHole[6].getTranslationY() < 0) {
+                    gopherHole[6].animate().translationY(0).setDuration(TRANSLATION_DURATION);
                     directHit();
                 }
                 break;
             case R.id.imageMole8:
-                if (molesClick[7].getTranslationY() < 0) {
-                    molesClick[7].animate().translationY(0).setDuration(20);
+                if (gopherHole[7].getTranslationY() < 0) {
+                    gopherHole[7].animate().translationY(0).setDuration(TRANSLATION_DURATION);
                     directHit();
                 }
                 break;
             case R.id.imageMole9:
-                if (molesClick[8].getTranslationY() < 0) {
-                    molesClick[8].animate().translationY(0).setDuration(20);
+                if (gopherHole[8].getTranslationY() < 0) {
+                    gopherHole[8].animate().translationY(0).setDuration(TRANSLATION_DURATION);
                     directHit();
                 }
                 break;
@@ -336,20 +278,23 @@ public class StartGameActivity extends AppCompatActivity {
 
     // When mole is hit, play sound and update score
     public void directHit(){
-
-        if (mPlayerWhack != null && mPlayerWhack.isPlaying()){
-            mPlayerWhack.stop();
-            mPlayerWhack.reset();
-            mPlayerWhack.release();
-        }
-
-        mPlayerWhack = MediaPlayer.create(getApplicationContext(), R.raw.hitted);
-        mPlayerWhack.start();
-
-        // Award points, update score
-        varScore += 100;
-        updateScore(varScore);
+        gameMusic(mPlayerWhack);
+        gameScore += 100;
+        updateScore(gameScore); // update score
     }
+
+    public void gameMusic(MediaPlayer music){
+        if (music != null && music.isPlaying()){
+            music.stop();
+            music.reset();
+            music.release();
+        }
+        music.start();
+    }
+
+
+
+
 }
 
 
