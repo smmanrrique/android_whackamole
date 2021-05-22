@@ -14,10 +14,17 @@
     <string name="str_show_time">showT</string>
     <string name="str_title_score">Score:</string>
     <string name="str_show_score">showS</string>
+    <string name="str_title_live">Lives:</string>
+    <string name="str_show_live">showL</string>
 
 
     <!-- LEVEL GAME -->
     <string name="level1">Easy</string>
     <string name="level2">Medium</string>
     <string name="level3">Hard</string>
+
+    <!-- MESSAGES   -->
+    <string name="str_end_time">You ran out of time!</string>
+    <string name="str_end_lives">You ran out of lives!</string>
+
 </resources>

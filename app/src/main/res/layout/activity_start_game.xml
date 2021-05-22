@@ -1,192 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@color/white"
-tools:context=".game.StartGameActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".game.StartGameActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/topBar"
         android:background="@color/sky"
+        android:weightSum="3"
         >
-
         <!--   TIME-->
-        <TextView
-            android:id="@+id/textTitleTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/str_title_time"
-            android:textSize="12pt"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:weightSum="3">
+
+            <TextView
+                android:layout_weight="2"
+                android:id="@+id/textTitleTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_title_time"
+                android:textSize="12pt"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"/>
+
+
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/textShowTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/textTitleTime"
+                android:text="@string/str_show_time"
+                android:textSize="12pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"/>
+        </RelativeLayout>
+
+        <!--  Vidas-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:weightSum="3">
+
+            <TextView
+                android:layout_weight="2.5"
+                android:id="@+id/textTitleLive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_title_live"
+                android:textSize="12pt"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"/>
+
+
+            <TextView
+                android:layout_weight="0.5"
+                android:id="@+id/textShowLive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/textTitleLive"
+                android:text="@string/str_show_live"
+                android:textSize="12pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"/>
+
+        </RelativeLayout>
 
         <!--  SCORE-->
-        <TextView
-            android:id="@+id/textShowTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="9dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="15dp"
-            android:layout_toRightOf="@+id/textTitleTime"
-            android:text="@string/str_show_time"
-            android:textSize="12pt" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:weightSum="3">
 
-        <TextView
-            android:id="@+id/textTitleScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="@+id/textShowTime"
-            android:layout_marginLeft="1.2in"
-            android:layout_marginTop="5dp"
-            android:text="@string/str_title_score"
-            android:textSize="12pt" />
+            <TextView
+                android:layout_weight="2.5"
+                android:id="@+id/textTitleScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_title_score"
+                android:textSize="12pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textShowScore"
-            android:textSize="10pt"
-            android:text="@string/str_show_score"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="@+id/textTitleScore"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginEnd="10dp"/>
+            <TextView
+                android:layout_weight="0.5"
+                android:id="@+id/textShowScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/textTitleScore"
+                android:text="@string/str_show_live"
+                android:textSize="12pt"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"/>
 
+        </RelativeLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/gameCanvas"
-        android:orientation="vertical"
-        android:weightSum="3.8"
-        android:layout_below="@+id/topBar">
-
-    <!--Row 0-->
-    <RelativeLayout
-        android:id="@+id/row0"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8"
-        android:background="@drawable/sky1"
-        android:orientation="horizontal"/>
-
-    <!--Row 1-->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/row1"
-        android:orientation="horizontal"
-        android:background="@drawable/sky2">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:weightSum="3">
-
-            <ImageView
-                android:layout_width="105dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:onClick="onClick"
-                android:adjustViewBounds="true"
-                android:id="@+id/imageMole1"
-                android:src="@drawable/gopher"
-                android:layout_gravity="bottom"/>
-            <ImageView
-                android:layout_width="105dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:onClick="onClick"
-                android:adjustViewBounds="true"
-                android:id="@+id/imageMole2"
-                android:src="@drawable/gopher"
-                android:layout_gravity="bottom"/>
-            <ImageView
-                android:layout_width="105dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:onClick="onClick"
-                android:adjustViewBounds="true"
-                android:id="@+id/imageMole3"
-                android:src="@drawable/gopher"
-                android:layout_gravity="bottom"/>
-        </LinearLayout>
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="2.5"
+            android:id="@+id/gameCanvas"
             android:orientation="vertical"
-            >
+            android:weightSum="3.8"
+            android:layout_below="@+id/topBar">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.3" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/plain_grass_3"
-                android:layout_weight="1.2"/>
-
-
-        </LinearLayout>
-
-        <LinearLayout
+        <!--Row 0-->
+        <RelativeLayout
+            android:id="@+id/row0"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:weightSum="3"
-            >
-
-            <ImageView
-                android:layout_width="110dp"
-                android:layout_height="49dp"
-                android:layout_weight="1"
-                android:id="@+id/holeImage1"
-                android:src="@drawable/hole"
-                android:layout_gravity="center_vertical"/>
-
-            <ImageView
-                android:id="@+id/holeImage2"
-                android:layout_width="110dp"
-                android:layout_height="49dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:src="@drawable/hole" />
-
-            <ImageView
-                android:layout_width="110dp"
-                android:layout_height="49dp"
-                android:layout_weight="1"
-                android:id="@+id/holeImage3"
-                android:src="@drawable/hole"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
-
-    </RelativeLayout>
+            android:layout_height="0dp"
+            android:layout_weight="0.8"
+            android:background="@drawable/sky1"
+            android:orientation="horizontal"/>
 
         <!--Row 1-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:id="@+id/row2"
+            android:id="@+id/row1"
             android:orientation="horizontal"
-            android:background="@drawable/plain_grass_3">
+            android:background="@drawable/sky2">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -199,7 +154,7 @@ tools:context=".game.StartGameActivity">
                     android:layout_weight="1"
                     android:onClick="onClick"
                     android:adjustViewBounds="true"
-                    android:id="@+id/imageMole4"
+                    android:id="@+id/imageMole1"
                     android:src="@drawable/gopher"
                     android:layout_gravity="bottom"/>
                 <ImageView
@@ -208,7 +163,7 @@ tools:context=".game.StartGameActivity">
                     android:layout_weight="1"
                     android:onClick="onClick"
                     android:adjustViewBounds="true"
-                    android:id="@+id/imageMole5"
+                    android:id="@+id/imageMole2"
                     android:src="@drawable/gopher"
                     android:layout_gravity="bottom"/>
                 <ImageView
@@ -217,7 +172,7 @@ tools:context=".game.StartGameActivity">
                     android:layout_weight="1"
                     android:onClick="onClick"
                     android:adjustViewBounds="true"
-                    android:id="@+id/imageMole6"
+                    android:id="@+id/imageMole3"
                     android:src="@drawable/gopher"
                     android:layout_gravity="bottom"/>
             </LinearLayout>
@@ -253,12 +208,12 @@ tools:context=".game.StartGameActivity">
                     android:layout_width="110dp"
                     android:layout_height="49dp"
                     android:layout_weight="1"
-                    android:id="@+id/holeImage4"
+                    android:id="@+id/holeImage1"
                     android:src="@drawable/hole"
                     android:layout_gravity="center_vertical"/>
 
                 <ImageView
-                    android:id="@+id/holeImage5"
+                    android:id="@+id/holeImage2"
                     android:layout_width="110dp"
                     android:layout_height="49dp"
                     android:layout_gravity="center_vertical"
@@ -269,113 +224,210 @@ tools:context=".game.StartGameActivity">
                     android:layout_width="110dp"
                     android:layout_height="49dp"
                     android:layout_weight="1"
-                    android:id="@+id/holeImage6"
+                    android:id="@+id/holeImage3"
                     android:src="@drawable/hole"
                     android:layout_gravity="center_vertical"/>
             </LinearLayout>
 
         </RelativeLayout>
 
-    <!--Row 3-->
+            <!--Row 1-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:id="@+id/row2"
+                android:orientation="horizontal"
+                android:background="@drawable/plain_grass_3">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/row3"
-        android:background="@drawable/plain_grass_3"
-        android:orientation="horizontal"
-        >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:weightSum="3">
 
-        <LinearLayout
+                    <ImageView
+                        android:layout_width="105dp"
+                        android:layout_height="80dp"
+                        android:layout_weight="1"
+                        android:onClick="onClick"
+                        android:adjustViewBounds="true"
+                        android:id="@+id/imageMole4"
+                        android:src="@drawable/gopher"
+                        android:layout_gravity="bottom"/>
+                    <ImageView
+                        android:layout_width="105dp"
+                        android:layout_height="80dp"
+                        android:layout_weight="1"
+                        android:onClick="onClick"
+                        android:adjustViewBounds="true"
+                        android:id="@+id/imageMole5"
+                        android:src="@drawable/gopher"
+                        android:layout_gravity="bottom"/>
+                    <ImageView
+                        android:layout_width="105dp"
+                        android:layout_height="80dp"
+                        android:layout_weight="1"
+                        android:onClick="onClick"
+                        android:adjustViewBounds="true"
+                        android:id="@+id/imageMole6"
+                        android:src="@drawable/gopher"
+                        android:layout_gravity="bottom"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="2.5"
+                    android:orientation="vertical"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.3" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/plain_grass_3"
+                        android:layout_weight="1.2"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:weightSum="3"
+                    >
+
+                    <ImageView
+                        android:layout_width="110dp"
+                        android:layout_height="49dp"
+                        android:layout_weight="1"
+                        android:id="@+id/holeImage4"
+                        android:src="@drawable/hole"
+                        android:layout_gravity="center_vertical"/>
+
+                    <ImageView
+                        android:id="@+id/holeImage5"
+                        android:layout_width="110dp"
+                        android:layout_height="49dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:src="@drawable/hole" />
+
+                    <ImageView
+                        android:layout_width="110dp"
+                        android:layout_height="49dp"
+                        android:layout_weight="1"
+                        android:id="@+id/holeImage6"
+                        android:src="@drawable/hole"
+                        android:layout_gravity="center_vertical"/>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        <!--Row 3-->
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:weightSum="3"
-            >
-
-            <ImageView
-                android:layout_width="105dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:onClick="onClick"
-                android:adjustViewBounds="true"
-                android:id="@+id/imageMole7"
-                android:src="@drawable/gopher"
-                android:layout_gravity="bottom"/>
-            <ImageView
-                android:layout_width="105dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:onClick="onClick"
-                android:adjustViewBounds="true"
-                android:id="@+id/imageMole8"
-                android:src="@drawable/gopher"
-                android:layout_gravity="bottom"/>
-            <ImageView
-                android:layout_width="105dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:onClick="onClick"
-                android:adjustViewBounds="true"
-                android:id="@+id/imageMole9"
-                android:src="@drawable/gopher"
-                android:layout_gravity="bottom"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:weightSum="2.5"
-            android:orientation="vertical"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/row3"
+            android:background="@drawable/plain_grass_3"
+            android:orientation="horizontal"
             >
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.3" />
+                android:layout_height="fill_parent"
+                android:weightSum="3"
+                >
+
+                <ImageView
+                    android:layout_width="105dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:adjustViewBounds="true"
+                    android:id="@+id/imageMole7"
+                    android:src="@drawable/gopher"
+                    android:layout_gravity="bottom"/>
+                <ImageView
+                    android:layout_width="105dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:adjustViewBounds="true"
+                    android:id="@+id/imageMole8"
+                    android:src="@drawable/gopher"
+                    android:layout_gravity="bottom"/>
+                <ImageView
+                    android:layout_width="105dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:adjustViewBounds="true"
+                    android:id="@+id/imageMole9"
+                    android:src="@drawable/gopher"
+                    android:layout_gravity="bottom"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/plain_grass_3"
-                android:layout_weight="1.2"/>
+                android:weightSum="2.5"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.3" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/plain_grass_3"
+                    android:layout_weight="1.2"/>
 
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:weightSum="3"
-            android:gravity="bottom">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:weightSum="3"
+                android:gravity="bottom">
 
-            <ImageView
-                android:layout_width="105dp"
-                android:layout_height="49dp"
-                android:layout_weight="1"
-                android:id="@+id/holeImage7"
-                android:src="@drawable/hole"
-                android:layout_gravity="center_vertical"/>
+                <ImageView
+                    android:layout_width="105dp"
+                    android:layout_height="49dp"
+                    android:layout_weight="1"
+                    android:id="@+id/holeImage7"
+                    android:src="@drawable/hole"
+                    android:layout_gravity="center_vertical"/>
 
-            <ImageView
-                android:layout_width="105dp"
-                android:layout_height="49dp"
-                android:layout_weight="1"
-                android:id="@+id/holeImage8"
-                android:src="@drawable/hole"
-                android:layout_gravity="center_vertical"/>
+                <ImageView
+                    android:layout_width="105dp"
+                    android:layout_height="49dp"
+                    android:layout_weight="1"
+                    android:id="@+id/holeImage8"
+                    android:src="@drawable/hole"
+                    android:layout_gravity="center_vertical"/>
 
-            <ImageView
-                android:layout_width="105dp"
-                android:layout_height="49dp"
-                android:layout_weight="1"
-                android:id="@+id/holeImage9"
-                android:src="@drawable/hole"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="105dp"
+                    android:layout_height="49dp"
+                    android:layout_weight="1"
+                    android:id="@+id/holeImage9"
+                    android:src="@drawable/hole"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
 
-    </RelativeLayout>
+        </RelativeLayout>
 
-</LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

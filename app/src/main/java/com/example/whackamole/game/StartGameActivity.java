@@ -28,8 +28,9 @@ public class StartGameActivity extends AppCompatActivity {
     private final static Logger LOGGER = Logger.getLogger(StartGameActivity.class.getName());
 
     // Declaring TextView
-    private TextView showTime;
-    private TextView showScore;
+    public TextView showTime;
+    public TextView showScore;
+    public TextView showLive;
 
     // Variables to music game
     public MediaPlayer mPlayerWhack;
@@ -71,7 +72,9 @@ public class StartGameActivity extends AppCompatActivity {
 
         showTime = (TextView) findViewById(R.id.textShowTime);
         showScore = (TextView) findViewById(R.id.textShowScore);
+        showLive = (TextView) findViewById(R.id.textShowLive);
         showScore.setText(String.valueOf(gameScore));
+        showLive.setText(String.valueOf(gameLive));
 
 
         // Start the game
@@ -118,7 +121,7 @@ public class StartGameActivity extends AppCompatActivity {
         @Override
         public void onFinish() {
             this.cancel();
-            EndGame(gameScore, getString(R.string.str_show_time));
+            EndGame(gameScore, getString(R.string.str_end_time));
 
         }
 
@@ -148,8 +151,8 @@ public class StartGameActivity extends AppCompatActivity {
     public void EndGame(int EndScore, String Reason) {     // Push message End the game!
         System.out.println("void EndGame(int EndScore, String Reason)");
         System.out.println("void EndGame(int EndScore, String Reason)");
-        MessageGameActivity msmPush = new MessageGameActivity();
-
+//        MessageGameActivity msmPush = new MessageGameActivity();
+//        msmPush.show();
         Intent intent = new Intent(getApplicationContext(), MenuGameActivity.class);
 //        intent.putExtra("score", EndScore);
 //        intent.putExtra("reason", Reason);
@@ -161,8 +164,6 @@ public class StartGameActivity extends AppCompatActivity {
 
     // Game loop is a runnable which calls itself every timeInterval (millis)
     public Runnable gameLoop = new Runnable() {
-
-        int prevHole = 10;
 
         @Override
         public void run () {
@@ -186,14 +187,14 @@ public class StartGameActivity extends AppCompatActivity {
                                     }
                                 });
                                 mPlayerMiss.start();
-                                gameLive -= 1;
-                                updateLives(gameLive);
-
                             }
                         }
                     }
                 }
             }, timeInterval);
+
+
+            updateLives(); // Update lives
 
             if (!flagEndGame) {
                 handler.postDelayed(gameLoop, timeInterval);
@@ -201,16 +202,14 @@ public class StartGameActivity extends AppCompatActivity {
         }
     };
 
-
-    public void updateScore(int Score){ // Updates score text field
-        showScore.setText(String.valueOf(Score));
+    public void updateLives(){
+        gameLive -= 1;
+        if(gameLive > 0){
+            showLive.setText(String.valueOf(gameLive));
+        }else{
+            EndGame(gameScore, getString(R.string.str_end_lives));
+        }
     }
-
-    public void updateLives(int lives){ // Updates score text field
-        showScore.setText(String.valueOf(lives));
-    }
-
-
 
     public void onClick(View v) { //  hit gopher
         // display message
@@ -280,7 +279,7 @@ public class StartGameActivity extends AppCompatActivity {
     public void directHit(){
         gameMusic(mPlayerWhack);
         gameScore += 100;
-        updateScore(gameScore); // update score
+        showScore.setText(String.valueOf(gameScore));
     }
 
     public void gameMusic(MediaPlayer music){
