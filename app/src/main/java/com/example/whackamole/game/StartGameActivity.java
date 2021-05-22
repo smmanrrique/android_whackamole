@@ -2,6 +2,7 @@ package com.example.whackamole.game;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.whackamole.R;
 
 import java.util.Random;
@@ -76,9 +78,7 @@ public class StartGameActivity extends AppCompatActivity {
         showScore.setText(String.valueOf(gameScore));
         showLive.setText(String.valueOf(gameLive));
 
-
-        // Start the game
-        matchTimer.start();
+        matchTimer.start(); // Start the game
         handler.post(gameLoop);
 
         flagEndGame = false;
@@ -103,17 +103,6 @@ public class StartGameActivity extends AppCompatActivity {
                 findViewById(R.id.imageMole9)};
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        flagEndGame = true;
-        matchTimer.cancel();
-
-        mPlayerWhack.stop();
-        mPlayerMiss.stop();
-
-    }
 
     public class gameTimer extends CountDownTimer { // game clock
         public gameTimer(int maxTime, long stepTime) { super(maxTime, stepTime);}
@@ -121,7 +110,7 @@ public class StartGameActivity extends AppCompatActivity {
         @Override
         public void onFinish() {
             this.cancel();
-            EndGame(gameScore, getString(R.string.str_end_time));
+            modalMessage(getString(R.string.str_end_time));
 
         }
 
@@ -146,25 +135,34 @@ public class StartGameActivity extends AppCompatActivity {
         }
     }
 
+    public void modalMessage(String sms){
+        flagEndGame = true;
+        matchTimer.cancel();
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.str_end_game))
+                .setMessage(sms)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        EndGame(sms);
+                    }
+                })
+                .setCancelable(false)
+                .setIcon(R.drawable.whackamole_start)
+                .show();
+    }
 
-
-    public void EndGame(int EndScore, String Reason) {     // Push message End the game!
+    public void EndGame( String reason) {     // Push message End the game!
         System.out.println("void EndGame(int EndScore, String Reason)");
         System.out.println("void EndGame(int EndScore, String Reason)");
-//        MessageGameActivity msmPush = new MessageGameActivity();
-//        msmPush.show();
         Intent intent = new Intent(getApplicationContext(), MenuGameActivity.class);
-//        intent.putExtra("score", EndScore);
-//        intent.putExtra("reason", Reason);
         matchTimer.cancel();
         startActivity(intent);
         this.finish();
 
     }
 
-    // Game loop is a runnable which calls itself every timeInterval (millis)
-    public Runnable gameLoop = new Runnable() {
 
+    public Runnable gameLoop = new Runnable() { // Game loop run every timeInterval
         @Override
         public void run () {
             numHole = new Random().nextInt(8);
@@ -196,18 +194,16 @@ public class StartGameActivity extends AppCompatActivity {
 
             updateLives(); // Update lives
 
-            if (!flagEndGame) {
-                handler.postDelayed(gameLoop, timeInterval);
-            }
+            if (!flagEndGame) {handler.postDelayed(gameLoop, timeInterval);}
         }
     };
 
     public void updateLives(){
         gameLive -= 1;
-        if(gameLive > 0){
+        if(gameLive > -1){
             showLive.setText(String.valueOf(gameLive));
         }else{
-            EndGame(gameScore, getString(R.string.str_end_lives));
+            modalMessage(getString(R.string.str_end_lives));
         }
     }
 

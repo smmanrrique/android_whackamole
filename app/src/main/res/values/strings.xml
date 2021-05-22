@@ -27,4 +27,6 @@
     <string name="str_end_time">You ran out of time!</string>
     <string name="str_end_lives">You ran out of lives!</string>
 
+    <string name="str_end_game">Game is over!</string>
+
 </resources>
