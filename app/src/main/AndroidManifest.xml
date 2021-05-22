@@ -13,6 +13,7 @@
         android:roundIcon="@drawable/whackamole_start"
         android:supportsRtl="true"
         android:theme="@style/Theme.Whackamole">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -23,15 +24,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".login.LogingActivity"
             android:parentActivityName=".MainActivity">
-
-            <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
         <activity
             android:name=".login.SignupActivity"
             android:parentActivityName=".MainActivity">
@@ -41,8 +42,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
+
         <activity android:name=".game.StartGameActivity" />
         <activity android:name=".game.MenuGameActivity" />
+        <activity
+            android:name=".game.OptionsActivity"
+            android:parentActivityName=".game.MenuGameActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".game.MenuGameActivity" />
+        </activity>
+
+        <activity
+            android:name=".game.ScoresActivity"
+            android:parentActivityName=".game.MenuGameActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".game.MenuGameActivity" />
+        </activity>
+
     </application>
 
 </manifest>

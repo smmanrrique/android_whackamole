@@ -19,6 +19,7 @@
 
 
     <!-- LEVEL GAME -->
+    <string name="str_game_level">GAME LEVEL</string>
     <string name="level1">Easy</string>
     <string name="level2">Medium</string>
     <string name="level3">Hard</string>
@@ -28,5 +29,9 @@
     <string name="str_end_lives">You ran out of lives!</string>
 
     <string name="str_end_game">Game is over!</string>
+
+    <!-- MESSAGES   -->
+    <string name="str_gamer_name">Gamer Name</string>
+    <string name="str_gamer_score">Game score</string>
 
 </resources>

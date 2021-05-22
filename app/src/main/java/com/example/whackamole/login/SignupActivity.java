@@ -8,6 +8,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.whackamole.R;
+import com.example.whackamole.game.MenuGameActivity;
 import com.example.whackamole.game.StartGameActivity;
 import com.example.whackamole.models.User;
 
@@ -36,8 +37,8 @@ public class SignupActivity extends AppCompatActivity {
         //Create user in db
 
 
-        // Start game
-        Intent intent = new Intent(this, StartGameActivity.class);
+        // Menu game
+        Intent intent = new Intent(this, MenuGameActivity.class);
         startActivity(intent);
     }
 }

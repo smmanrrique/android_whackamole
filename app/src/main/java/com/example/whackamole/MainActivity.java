@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 
+import com.example.whackamole.game.OptionsActivity;
 import com.example.whackamole.login.LogingActivity;
 import com.example.whackamole.login.SignupActivity;
 

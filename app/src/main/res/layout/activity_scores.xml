@@ -15,8 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="8"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,22 +27,36 @@
         android:layout_gravity="center"
         android:textSize="30sp"/>
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6.25"
-        android:id="@+id/scoreTable">
-    </TableLayout>
 
-<!--    <Button-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:text="@string/str_button_main"-->
-<!--        android:id="@+id/button_Menu"-->
-<!--        android:layout_gravity="center"/>-->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6.25"
+            android:id="@+id/scrollView1"
+            android:layout_alignParentLeft="true" >
 
+            <HorizontalScrollView
+                android:id="@+id/hscrll1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <RelativeLayout
+                    android:id="@+id/RelativeLayout1"
+                    android:layout_width="fill_parent"
+                    android:layout_gravity="center"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical" >
+
+                    <TableLayout
+                        android:id="@+id/table_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true" >
+                    </TableLayout>
+
+                </RelativeLayout>
+            </HorizontalScrollView>
+        </ScrollView>
     </LinearLayout>
 
 </RelativeLayout>
