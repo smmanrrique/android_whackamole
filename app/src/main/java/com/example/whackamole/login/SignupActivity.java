@@ -2,19 +2,31 @@ package com.example.whackamole.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.whackamole.APIClient;
 import com.example.whackamole.R;
 import com.example.whackamole.game.MenuGameActivity;
 import com.example.whackamole.game.StartGameActivity;
+import com.example.whackamole.models.Loging;
 import com.example.whackamole.models.User;
+import com.example.whackamole.services.UserServices;
+
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class SignupActivity extends AppCompatActivity {
 
     User user = new User();
+    APIClient apiClient = new APIClient();
+    Retrofit retrofit = apiClient.getClient();
+    UserServices userServices = retrofit.create(UserServices.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +44,35 @@ public class SignupActivity extends AppCompatActivity {
         user.setNickname(nickname.getText().toString());
         user.setPassword(password.getText().toString());
 
-        System.out.println(user.toString());
+        Call<User> call = userServices.doPostUser(user);
 
-        //Create user in db
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if (SDK_INT > 8){
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
 
+            try {
+                System.out.println(call.request().url().toString());
+                Response<User> response = call.execute();
+                System.out.println(response.isSuccessful());
+                if(response.isSuccessful()){
+                    // Menu game
+                    Intent intent = new Intent(this, MenuGameActivity.class);
+                    intent.putExtra("nickname", user.getNickname());
+                    startActivity(intent);
+                    finish();
+                }else{
+                    System.out.println(response.errorBody());
 
-        // Menu game
-        Intent intent = new Intent(this, MenuGameActivity.class);
-        startActivity(intent);
+                    // display message
+                    Toast.makeText(view.getContext(),
+                            "ERROR",
+                            Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }

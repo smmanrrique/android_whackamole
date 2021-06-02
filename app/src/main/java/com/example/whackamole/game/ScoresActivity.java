@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.whackamole.R;
 import com.example.whackamole.models.Score;
-import com.example.whackamole.services.UserServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class ScoresActivity extends AppCompatActivity {
 
     ArrayList<Score> scores = new ArrayList<Score>();
 
-    UserServices userServices;
+//    UserServices userServices;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,7 @@ public class ScoresActivity extends AppCompatActivity {
                 .baseUrl("https://jsonplaceholder.typicode.com/")
                 .build();
 
-        Call<List> call = userServices.getPosts();
+//        Call<List> call = userServices.getPosts();
 
         init();
     }

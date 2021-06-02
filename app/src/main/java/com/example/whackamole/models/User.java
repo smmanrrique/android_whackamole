@@ -1,35 +1,43 @@
 package com.example.whackamole.models;
 
+
 import java.io.Serializable;
 
 public class User implements Serializable {
-
-    Integer user_id;
+    Integer id;
     String nickname;
     String email;
     String password;
-    String join_date;
+    String date_of_joining;
 
     public User() {
     }
 
-    public User(Integer user_id, String nickname, String email, String password, String join_date) {
-        this.user_id = user_id;
+    public User(Integer id, String nickname, String email, String password, String date_of_joining) {
+        this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;
-        this.join_date = join_date;
+        this.date_of_joining = date_of_joining;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "user_id=" + user_id +
+                "user_id=" + id +
                 ", nickname='" + nickname + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", join_date='" + join_date + '\'' +
+                ", date_of_joining='" + date_of_joining + '\'' +
                 '}';
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNickname() {
@@ -56,11 +64,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public String getDate_of_joining() {
+        return date_of_joining;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setDate_of_joining(String date_of_joining) {
+        this.date_of_joining = date_of_joining;
     }
 }
