@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.StrictMode;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,17 +18,31 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.whackamole.APIClient;
 import com.example.whackamole.R;
+import com.example.whackamole.models.Game;
+import com.example.whackamole.models.User;
+import com.example.whackamole.services.GameService;
+import com.example.whackamole.services.UserServices;
 
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 
 public class StartGameActivity extends AppCompatActivity {
 
     private final static Logger LOGGER = Logger.getLogger(StartGameActivity.class.getName());
+    public User user;
+    public Game game;
+    APIClient apiClient = new APIClient();
+    Retrofit retrofit = apiClient.getClient();
+    GameService gameService = retrofit.create(GameService.class);
 
     // Declaring TextView
     public TextView showTime;
@@ -67,6 +82,39 @@ public class StartGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game);
+
+        if(getIntent().getExtras() != null) {
+            user = (User) getIntent().getSerializableExtra("User");
+            System.out.println(user);
+            game= new Game(user.getNickname(), user.getId());
+
+            System.out.println(game);
+            Call<Game> call = gameService.doPostGame(game);
+
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+            if (SDK_INT > 8){
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
+
+                try {
+                    System.out.println(call.request().url().toString());
+                    Response<Game> response = call.execute();
+                    if(response.isSuccessful()){
+                        game = response.body();
+                        System.out.println(game.getId());
+                        System.out.println(game);
+                    }else{
+                        System.out.println("------|>response.errorBody()");
+                        System.out.println(response.errorBody());
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+        }
+
 
         // Get game difficulty Level
         final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
@@ -154,6 +202,36 @@ public class StartGameActivity extends AppCompatActivity {
     public void EndGame( String reason) {     // Push message End the game!
         System.out.println("void EndGame(int EndScore, String Reason)");
         System.out.println("void EndGame(int EndScore, String Reason)");
+
+
+
+        // TODO ACTUALIZAR EL JUEGO CON EL SCORE Y EL PRESUNTO GANADOR
+
+//        System.out.println(game);
+//        Call<Game> call = gameService.pu(game);
+//        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+//        if (SDK_INT > 8){
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+//                    .permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//
+//            try {
+//                System.out.println(call.request().url().toString());
+//                Response<Game> response = call.execute();
+//                if(response.isSuccessful()){
+//                    game = response.body();
+//                    System.out.println(game.getId());
+//                    System.out.println(game);
+//                }else{
+//                    System.out.println("------|>response.errorBody()");
+//                    System.out.println(response.errorBody());
+//                }
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+
+
         Intent intent = new Intent(getApplicationContext(), MenuGameActivity.class);
         matchTimer.cancel();
         startActivity(intent);

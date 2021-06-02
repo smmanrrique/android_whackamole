@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.whackamole.APIClient;
 import com.example.whackamole.R;
 import com.example.whackamole.models.Score;
+import com.example.whackamole.services.UserServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,9 @@ public class ScoresActivity extends AppCompatActivity {
 
     ArrayList<Score> scores = new ArrayList<Score>();
 
-//    UserServices userServices;
+    APIClient apiClient = new APIClient();
+    Retrofit retrofit = apiClient.getClient();
+    UserServices userServices = retrofit.create(UserServices.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +37,7 @@ public class ScoresActivity extends AppCompatActivity {
         scores.add(new Score("j212ose", 92));
         scores.add(new Score("arrar", 535));
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://jsonplaceholder.typicode.com/")
-                .build();
 
-//        Call<List> call = userServices.getPosts();
 
         init();
     }

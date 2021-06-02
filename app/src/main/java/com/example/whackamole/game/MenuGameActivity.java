@@ -19,8 +19,9 @@ import retrofit2.Retrofit;
 
 public class MenuGameActivity extends AppCompatActivity {
 
+    String nickname;
     Intent intent;
-    User user;
+    User user= new User();
     APIClient apiClient = new APIClient();
     Retrofit retrofit = apiClient.getClient();
     UserServices userServices = retrofit.create(UserServices.class);
@@ -30,29 +31,30 @@ public class MenuGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_game);
 
-        Intent recibir = getIntent();
-        String nickname = recibir.getStringExtra("nickname");
-        System.out.println("RECIBIDO NICKNAME= "+nickname);
-        Call<User> call = userServices.doGetUserNickname(nickname);
+        if(getIntent().getExtras() != null) {
+            nickname = getIntent().getStringExtra("nickname");
+            System.out.println("RECIBIDO NICKNAME= "+nickname);
+            Call<User> call = userServices.doGetUserNickname(nickname);
 
-        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-        if (SDK_INT > 8){
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                    .permitAll().build();
-            StrictMode.setThreadPolicy(policy);
+            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+            if (SDK_INT > 8){
+                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                        .permitAll().build();
+                StrictMode.setThreadPolicy(policy);
 
-            try {
-                System.out.println(call.request().url().toString());
-                Response<User> response = call.execute();
-                if(response.isSuccessful()){
-                    user = response.body();
-                }else{
-                    System.out.println(response.errorBody());
+                try {
+                    System.out.println(call.request().url().toString());
+                    Response<User> response = call.execute();
+                    if(response.isSuccessful()){
+                        user = response.body();
+                    }else{
+                        System.out.println(response.errorBody());
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-    }
+        }
+        }
     }
 
 
@@ -61,16 +63,19 @@ public class MenuGameActivity extends AppCompatActivity {
             case R.id.button_start:
                 System.out.println(" case R.id.button_start:");
                 intent = new Intent(getApplicationContext(), StartGameActivity.class);
+                intent.putExtra("User", user);
                 startActivity(intent);
                 break;
             case R.id.button_scores:
                 System.out.println("case R.id.button_scores:");
                 intent = new Intent(getApplicationContext(), ScoresActivity.class);
+                intent.putExtra("User", user);
                 startActivity(intent);
                 break;
             case R.id.button_options:
                 System.out.println("case R.id.button_options:");
                 intent = new Intent(getApplicationContext(), OptionsActivity.class);
+                intent.putExtra("User", user);
                 startActivity(intent);
                 break;
         }
