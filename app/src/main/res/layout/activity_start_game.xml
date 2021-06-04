@@ -149,8 +149,8 @@
                 android:weightSum="3">
 
                 <ImageView
-                    android:layout_width="105dp"
-                    android:layout_height="80dp"
+                    android:layout_width="95dp"
+                    android:layout_height="130dp"
                     android:layout_weight="1"
                     android:onClick="onClick"
                     android:adjustViewBounds="true"
@@ -158,8 +158,8 @@
                     android:src="@drawable/gopher"
                     android:layout_gravity="bottom"/>
                 <ImageView
-                    android:layout_width="105dp"
-                    android:layout_height="80dp"
+                    android:layout_width="95dp"
+                    android:layout_height="130dp"
                     android:layout_weight="1"
                     android:onClick="onClick"
                     android:adjustViewBounds="true"
@@ -167,8 +167,8 @@
                     android:src="@drawable/gopher"
                     android:layout_gravity="bottom"/>
                 <ImageView
-                    android:layout_width="105dp"
-                    android:layout_height="80dp"
+                    android:layout_width="95dp"
+                    android:layout_height="130dp"
                     android:layout_weight="1"
                     android:onClick="onClick"
                     android:adjustViewBounds="true"

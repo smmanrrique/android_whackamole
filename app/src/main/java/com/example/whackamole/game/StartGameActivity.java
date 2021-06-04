@@ -57,7 +57,7 @@ public class StartGameActivity extends AppCompatActivity {
     static final int MILLIS_TIME = 1000;
     static final int GOPHER_WAIT_TIME = 300;
     static final int TRANSLATION_DURATION = 30;
-    public int maxTime = 60 * MILLIS_TIME;
+    public int maxTime = 30 * MILLIS_TIME;
     public long stepTime = 1 * MILLIS_TIME;
 
     // Relatively static initial declarations
@@ -83,37 +83,41 @@ public class StartGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game);
 
-        if(getIntent().getExtras() != null) {
-            user = (User) getIntent().getSerializableExtra("User");
-            System.out.println(user);
-            game= new Game(user.getNickname(), user.getId());
+        user = new User();
+        user.setNickname("string");
+        user.setPassword("string");
 
-            System.out.println(game);
-            Call<Game> call = gameService.doPostGame(game);
-
-            int SDK_INT = android.os.Build.VERSION.SDK_INT;
-            if (SDK_INT > 8){
-                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                        .permitAll().build();
-                StrictMode.setThreadPolicy(policy);
-
-                try {
-                    System.out.println(call.request().url().toString());
-                    Response<Game> response = call.execute();
-                    if(response.isSuccessful()){
-                        game = response.body();
-                        System.out.println(game.getId());
-                        System.out.println(game);
-                    }else{
-                        System.out.println("------|>response.errorBody()");
-                        System.out.println(response.errorBody());
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-        }
+//        if(getIntent().getExtras() != null) {
+//            user = (User) getIntent().getSerializableExtra("User");
+//            System.out.println(user);
+//            game= new Game(user.getNickname(), user.getId());
+//
+//            System.out.println(game);
+//            Call<Game> call = gameService.doPostGame(game);
+//
+//            int SDK_INT = android.os.Build.VERSION.SDK_INT;
+//            if (SDK_INT > 8){
+//                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+//                        .permitAll().build();
+//                StrictMode.setThreadPolicy(policy);
+//
+//                try {
+//                    System.out.println(call.request().url().toString());
+//                    Response<Game> response = call.execute();
+//                    if(response.isSuccessful()){
+//                        game = response.body();
+//                        System.out.println(game.getId());
+//                        System.out.println(game);
+//                    }else{
+//                        System.out.println("------|>response.errorBody()");
+//                        System.out.println(response.errorBody());
+//                    }
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            }
+//
+//        }
 
 
         // Get game difficulty Level
@@ -158,6 +162,7 @@ public class StartGameActivity extends AppCompatActivity {
         @Override
         public void onFinish() {
             this.cancel();
+            // TODO CAMBIAR MENSAJE
             modalMessage(getString(R.string.str_end_time));
 
         }
@@ -166,20 +171,21 @@ public class StartGameActivity extends AppCompatActivity {
             int currentTime = (int) (millisUntilFinished / MILLIS_TIME);
             showTime.setText(String.valueOf(currentTime)); // update gameTime
 
+            updateLives();
+
             if ((currentTime%5 == 0) &&  (currentTime != 60)){
                 switch(gameLevel) {
                     case "Easy":
                         timeInterval *= 0.99;
                         gopherWaitTime *= 0.99;
                     case "Medium":
+                        timeInterval *= 0.97;
+                        gopherWaitTime *= 0.97;
+                    case "Hard":
                         timeInterval *= 0.95;
                         gopherWaitTime *= 0.95;
-                    case "Hard":
-                        timeInterval *= 0.90;
-                        gopherWaitTime *= 0.90;
                 }
             }
-
         }
     }
 
@@ -203,33 +209,31 @@ public class StartGameActivity extends AppCompatActivity {
         System.out.println("void EndGame(int EndScore, String Reason)");
         System.out.println("void EndGame(int EndScore, String Reason)");
 
+        System.out.println(game);
+        game.setScore(gameScore);
+        game.setWinner(user.getNickname());
+        System.out.println(game.toString());
 
+        Call<Game> call = gameService.doPutGame(game.getId(), game);
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        if (SDK_INT > 8){
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                    .permitAll().build();
+            StrictMode.setThreadPolicy(policy);
 
-        // TODO ACTUALIZAR EL JUEGO CON EL SCORE Y EL PRESUNTO GANADOR
-
-//        System.out.println(game);
-//        Call<Game> call = gameService.pu(game);
-//        int SDK_INT = android.os.Build.VERSION.SDK_INT;
-//        if (SDK_INT > 8){
-//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-//                    .permitAll().build();
-//            StrictMode.setThreadPolicy(policy);
-//
-//            try {
-//                System.out.println(call.request().url().toString());
-//                Response<Game> response = call.execute();
-//                if(response.isSuccessful()){
-//                    game = response.body();
-//                    System.out.println(game.getId());
-//                    System.out.println(game);
-//                }else{
-//                    System.out.println("------|>response.errorBody()");
-//                    System.out.println(response.errorBody());
-//                }
-//            } catch (Exception ex) {
-//                ex.printStackTrace();
-//            }
-//        }
+            try {
+                System.out.println(call.request().url().toString());
+                Response<Game> response = call.execute();
+                if(response.isSuccessful()){
+                    System.out.println(game);
+                }else{
+                    System.out.println("------|>response.errorBody()");
+                    System.out.println(response.errorBody());
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
 
 
         Intent intent = new Intent(getApplicationContext(), MenuGameActivity.class);
@@ -244,7 +248,6 @@ public class StartGameActivity extends AppCompatActivity {
         @Override
         public void run () {
             numHole = new Random().nextInt(8);
-            LOGGER.info("Select new hole ---> "+ String.valueOf(numHole));
 
             // Gopher up
             gopherHole[numHole].animate().translationY(yPixelCoordinate).setDuration(gopherWaitTime);
@@ -260,8 +263,14 @@ public class StartGameActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         gopherHole[j].animate().translationY(0).setDuration(5);
+//
                                     }
                                 });
+                                System.out.println(gameLive);
+                                gameLive -= 1;
+                                System.out.println("-----------------1");
+                                System.out.println(gameLive);
+//                                updateLives(); // Update lives
                                 mPlayerMiss.start();
                             }
                         }
@@ -269,15 +278,11 @@ public class StartGameActivity extends AppCompatActivity {
                 }
             }, timeInterval);
 
-
-            updateLives(); // Update lives
-
             if (!flagEndGame) {handler.postDelayed(gameLoop, timeInterval);}
         }
     };
 
     public void updateLives(){
-        gameLive -= 1;
         if(gameLive > -1){
             showLive.setText(String.valueOf(gameLive));
         }else{

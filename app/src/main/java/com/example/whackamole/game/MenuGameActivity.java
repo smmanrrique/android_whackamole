@@ -33,7 +33,7 @@ public class MenuGameActivity extends AppCompatActivity {
 
         if(getIntent().getExtras() != null) {
             nickname = getIntent().getStringExtra("nickname");
-            System.out.println("RECIBIDO NICKNAME= "+nickname);
+
             Call<User> call = userServices.doGetUserNickname(nickname);
 
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -74,7 +74,7 @@ public class MenuGameActivity extends AppCompatActivity {
                 break;
             case R.id.button_options:
                 System.out.println("case R.id.button_options:");
-                intent = new Intent(getApplicationContext(), OptionsActivity.class);
+                intent = new Intent(getApplicationContext(), MultiplayerActivity.class);
                 intent.putExtra("User", user);
                 startActivity(intent);
                 break;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".game.MultiplayerActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/multiplayer_match"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:id="@+id/row1"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:background="@drawable/sky2"/>-->
+
+</RelativeLayout>

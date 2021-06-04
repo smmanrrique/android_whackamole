@@ -63,6 +63,15 @@
                 android:value=".game.MenuGameActivity" />
         </activity>
 
+
+        <activity
+            android:name=".game.MultiplayerActivity"
+            android:parentActivityName=".game.MenuGameActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".game.MenuGameActivity" />
+        </activity>
+
     </application>
 
 </manifest>
