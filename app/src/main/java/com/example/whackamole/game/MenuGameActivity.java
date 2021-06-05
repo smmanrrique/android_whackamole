@@ -1,23 +1,34 @@
 package com.example.whackamole.game;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.whackamole.APIClient;
 import com.example.whackamole.R;
+import com.example.whackamole.models.Game;
 import com.example.whackamole.models.User;
 import com.example.whackamole.services.UserServices;
+
+import java.util.logging.Logger;
 
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MenuGameActivity extends AppCompatActivity {
+
+    private final static Logger LOGGER = Logger.getLogger(MenuGameActivity.class.getName());
+
+    private static final int REQUEST_CODE = 0;
 
     String nickname;
     Intent intent;
@@ -47,8 +58,9 @@ public class MenuGameActivity extends AppCompatActivity {
                     Response<User> response = call.execute();
                     if(response.isSuccessful()){
                         user = response.body();
+                        LOGGER.info(user.toString());
                     }else{
-                        System.out.println(response.errorBody());
+                        LOGGER.info(response.errorBody().string());
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -61,25 +73,41 @@ public class MenuGameActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button_start:
-                System.out.println(" case R.id.button_start:");
+                LOGGER.info(" case R.id.button_start:");
                 intent = new Intent(getApplicationContext(), StartGameActivity.class);
+                intent.putExtra("GameType", "individual");
                 intent.putExtra("User", user);
                 startActivity(intent);
                 break;
+            case R.id.button_multiplayer:
+                LOGGER.info(" R.id.multiplayer_match");
+                intent = new Intent(getApplicationContext(), StartGameActivity.class);
+                intent.putExtra("GameType", "multiplayer");
+                intent.putExtra("User", user);
+                startActivity(intent);
+                break;
+            case R.id.button_multiplayer_inv:
+                LOGGER.info(" R.id.button_multiplayer_inv");
+                intent = new Intent(getApplicationContext(), MultiplayerActivity.class);
+                intent.putExtra("User", user);
+                startActivity(intent);
+                break;
+
             case R.id.button_scores:
-                System.out.println("case R.id.button_scores:");
+                LOGGER.info("case R.id.button_scores:");
                 intent = new Intent(getApplicationContext(), ScoresActivity.class);
                 intent.putExtra("User", user);
                 startActivity(intent);
                 break;
             case R.id.button_options:
-                System.out.println("case R.id.button_options:");
-                intent = new Intent(getApplicationContext(), MultiplayerActivity.class);
-                intent.putExtra("User", user);
+                LOGGER.info("case R.id.button_options:");
+                intent = new Intent(getApplicationContext(), OptionsActivity.class);
                 startActivity(intent);
                 break;
         }
     }
+
+
 
 
 

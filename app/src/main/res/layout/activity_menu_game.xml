@@ -1,10 +1,8 @@
-<!--Start Screen StartActivity Layout-->
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -36,7 +34,7 @@
             android:layout_height="0dp"
             android:id="@+id/img_start_mole"
             android:src="@drawable/whackamole_start"
-            android:layout_weight="1.6"
+            android:layout_weight="1.4"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="15dp"/>
 
@@ -45,9 +43,7 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:gravity="center"
-            android:layout_weight="1">
-
-            <!--Buttons the Play Game, Options, High Scores-->
+            android:layout_weight="1.2">
 
             <Button
                 android:layout_width="200dp"
@@ -57,6 +53,22 @@
                 android:onClick="onClick"
                 android:layout_weight="1"
                 android:layout_marginTop="5dp"/>
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="@string/str_button_multiplayer"
+                android:onClick="onClick"
+                android:id="@+id/button_multiplayer"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="@string/str_button_multiplayer_inv"
+                android:onClick="onClick"
+                android:id="@+id/button_multiplayer_inv"
+                android:layout_weight="1"/>
 
             <Button
                 android:layout_width="200dp"

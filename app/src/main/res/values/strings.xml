@@ -6,6 +6,8 @@
     <string name="str_button_accept">ACCEPT</string>
     <string name="str_button_start">START GAME</string>
     <string name="str_button_options">OPTIONS</string>
+    <string name="str_button_multiplayer">MULTIPLAYER</string>
+    <string name="str_button_multiplayer_inv">MULTIPLAYER INVITATIONS</string>
     <string name="str_button_scores">CHAMPIONS</string>
     <string name="str_text_title">Whack A Mole!</string>
     <string name="str_button_register">I already have an account</string>

@@ -38,8 +38,10 @@ import retrofit2.Retrofit;
 public class StartGameActivity extends AppCompatActivity {
 
     private final static Logger LOGGER = Logger.getLogger(StartGameActivity.class.getName());
+
     public User user;
     public Game game;
+    public String game_type;
     APIClient apiClient = new APIClient();
     Retrofit retrofit = apiClient.getClient();
     GameService gameService = retrofit.create(GameService.class);
@@ -80,44 +82,45 @@ public class StartGameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_game);
 
-        user = new User();
-        user.setNickname("string");
-        user.setPassword("string");
+        if(getIntent().getExtras() != null) {
+            user = (User) getIntent().getSerializableExtra("User");
+            System.out.println(user.toString());
 
-//        if(getIntent().getExtras() != null) {
-//            user = (User) getIntent().getSerializableExtra("User");
-//            System.out.println(user);
-//            game= new Game(user.getNickname(), user.getId());
-//
-//            System.out.println(game);
-//            Call<Game> call = gameService.doPostGame(game);
-//
-//            int SDK_INT = android.os.Build.VERSION.SDK_INT;
-//            if (SDK_INT > 8){
-//                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-//                        .permitAll().build();
-//                StrictMode.setThreadPolicy(policy);
-//
-//                try {
-//                    System.out.println(call.request().url().toString());
-//                    Response<Game> response = call.execute();
-//                    if(response.isSuccessful()){
-//                        game = response.body();
-//                        System.out.println(game.getId());
-//                        System.out.println(game);
-//                    }else{
-//                        System.out.println("------|>response.errorBody()");
-//                        System.out.println(response.errorBody());
-//                    }
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                }
-//            }
-//
-//        }
+
+
+            game = (Game) getIntent().getSerializableExtra("Game");
+            if(game == null){
+                LOGGER.info("----------------- //Init new individual game");
+                game= new Game(user.getNickname(), user.getId());
+                Call<Game> call = gameService.doPostGame(game);
+
+                int SDK_INT = android.os.Build.VERSION.SDK_INT;
+                if (SDK_INT > 8){
+                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                            .permitAll().build();
+                    StrictMode.setThreadPolicy(policy);
+
+                    try {
+                        LOGGER.info(call.request().url().toString());
+                        Response<Game> response = call.execute();
+                        if(response.isSuccessful()){
+                            game = response.body();
+                            System.out.println(game.getId());
+                            System.out.println(game);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+
+
+
+        }
 
 
         // Get game difficulty Level
@@ -206,13 +209,10 @@ public class StartGameActivity extends AppCompatActivity {
     }
 
     public void EndGame( String reason) {     // Push message End the game!
-        System.out.println("void EndGame(int EndScore, String Reason)");
-        System.out.println("void EndGame(int EndScore, String Reason)");
 
-        System.out.println(game);
         game.setScore(gameScore);
         game.setWinner(user.getNickname());
-        System.out.println(game.toString());
+        LOGGER.info(game.toString());
 
         Call<Game> call = gameService.doPutGame(game.getId(), game);
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -236,9 +236,11 @@ public class StartGameActivity extends AppCompatActivity {
         }
 
 
-        Intent intent = new Intent(getApplicationContext(), MenuGameActivity.class);
-        matchTimer.cancel();
-        startActivity(intent);
+        Intent intent = new Intent();
+        intent.putExtra("User", user);
+//        Intent intent = new Intent(getApplicationContext(), MenuGameActivity.class);
+//        matchTimer.cancel();
+//        startActivity(intent);
         this.finish();
 
     }
@@ -263,14 +265,9 @@ public class StartGameActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         gopherHole[j].animate().translationY(0).setDuration(5);
-//
                                     }
                                 });
-                                System.out.println(gameLive);
                                 gameLive -= 1;
-                                System.out.println("-----------------1");
-                                System.out.println(gameLive);
-//                                updateLives(); // Update lives
                                 mPlayerMiss.start();
                             }
                         }
@@ -369,6 +366,7 @@ public class StartGameActivity extends AppCompatActivity {
         }
         music.start();
     }
+
 
 
 

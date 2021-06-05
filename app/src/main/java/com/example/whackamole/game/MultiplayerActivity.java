@@ -1,5 +1,7 @@
 package com.example.whackamole.game;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -19,12 +21,16 @@ import com.example.whackamole.services.UserServices;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MultiplayerActivity extends AppCompatActivity implements ReciclerViewActivity.ItemClickListener {
+
+    private final static Logger LOGGER = Logger.getLogger(MultiplayerActivity.class.getName());
+
     User user;
     Intent intent;
     List<Game> games;
@@ -39,8 +45,10 @@ public class MultiplayerActivity extends AppCompatActivity implements ReciclerVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer);
 
+        LOGGER.info("ESTOY AQUI ---------------------------------??? ");
         if(getIntent().getExtras() != null) {
             user = (User) getIntent().getSerializableExtra("User");
+            LOGGER.info(user.toString());
 
             // Get match
             Call<List<Game>> call = gameService.getMultiplayerGames(user.getNickname());
@@ -50,8 +58,6 @@ public class MultiplayerActivity extends AppCompatActivity implements ReciclerVi
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                         .permitAll().build();
                 StrictMode.setThreadPolicy(policy);
-                System.out.println("-------------? call.request().url().toString()");
-                System.out.println(call.request().url().toString());
 
                 try {
                     Response<List<Game>> response = call.execute();
@@ -88,10 +94,15 @@ public class MultiplayerActivity extends AppCompatActivity implements ReciclerVi
                 Toast.LENGTH_SHORT).show();
 
         game = games.get(position);
+        System.out.println(game.toString());
         intent = new Intent(getApplicationContext(), StartGameActivity.class);
         intent.putExtra("User", user);
         intent.putExtra("Game", game);
         startActivity(intent);
+        this.finish();
 
     }
+
+
+
 }
