@@ -1,6 +1,7 @@
 package com.example.whackamole.services;
 
 import com.example.whackamole.models.Game;
+import com.example.whackamole.models.Score;
 import com.example.whackamole.models.User;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface GameService {
     String API_ROUTE = "/api/game/match/";
 
     @GET(API_ROUTE+"scores")
-    Call<Game> doGetScores();
+    Call<List<Score>> doGetScores();
 
     @GET(API_ROUTE)
     Call<List<Game>> getGames();

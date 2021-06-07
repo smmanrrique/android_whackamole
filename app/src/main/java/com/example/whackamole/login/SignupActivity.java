@@ -68,7 +68,7 @@ public class SignupActivity extends AppCompatActivity {
                     // display message
                     Toast.makeText(view.getContext(),
                             "ERROR",
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

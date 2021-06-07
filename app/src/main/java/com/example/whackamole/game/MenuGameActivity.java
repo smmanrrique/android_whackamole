@@ -1,20 +1,16 @@
 package com.example.whackamole.game;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.whackamole.APIClient;
 import com.example.whackamole.R;
-import com.example.whackamole.models.Game;
 import com.example.whackamole.models.User;
 import com.example.whackamole.services.UserServices;
 
@@ -65,30 +61,29 @@ public class MenuGameActivity extends AppCompatActivity {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-        }
+            }
         }
     }
 
 
     public void onClick(View view) {
+        LOGGER.info(user.toString());
         switch (view.getId()) {
             case R.id.button_start:
                 LOGGER.info(" case R.id.button_start:");
                 intent = new Intent(getApplicationContext(), StartGameActivity.class);
-                intent.putExtra("GameType", "individual");
                 intent.putExtra("User", user);
                 startActivity(intent);
                 break;
             case R.id.button_multiplayer:
-                LOGGER.info(" R.id.multiplayer_match");
-                intent = new Intent(getApplicationContext(), StartGameActivity.class);
-                intent.putExtra("GameType", "multiplayer");
+                LOGGER.info(" MultiplayerNewActivity ");
+                intent = new Intent(getApplicationContext(), MultiplayerNewActivity.class);
                 intent.putExtra("User", user);
                 startActivity(intent);
                 break;
             case R.id.button_multiplayer_inv:
-                LOGGER.info(" R.id.button_multiplayer_inv");
-                intent = new Intent(getApplicationContext(), MultiplayerActivity.class);
+                LOGGER.info("MultiplayerInvitationActivity");
+                intent = new Intent(getApplicationContext(), MultiplayerInvitationActivity.class);
                 intent.putExtra("User", user);
                 startActivity(intent);
                 break;
@@ -106,7 +101,6 @@ public class MenuGameActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
 
 

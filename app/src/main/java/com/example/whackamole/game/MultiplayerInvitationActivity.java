@@ -1,7 +1,5 @@
 package com.example.whackamole.game;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -17,7 +15,6 @@ import com.example.whackamole.R;
 import com.example.whackamole.models.Game;
 import com.example.whackamole.models.User;
 import com.example.whackamole.services.GameService;
-import com.example.whackamole.services.UserServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +24,9 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class MultiplayerActivity extends AppCompatActivity implements ReciclerViewActivity.ItemClickListener {
+public class MultiplayerInvitationActivity extends AppCompatActivity implements ReciclerViewActivity.ItemClickListener {
 
-    private final static Logger LOGGER = Logger.getLogger(MultiplayerActivity.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(MultiplayerNewActivity.class.getName());
 
     User user;
     Intent intent;
@@ -45,7 +42,6 @@ public class MultiplayerActivity extends AppCompatActivity implements ReciclerVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer);
 
-        LOGGER.info("ESTOY AQUI ---------------------------------??? ");
         if(getIntent().getExtras() != null) {
             user = (User) getIntent().getSerializableExtra("User");
             LOGGER.info(user.toString());
@@ -77,10 +73,11 @@ public class MultiplayerActivity extends AppCompatActivity implements ReciclerVi
                         adapter.setClickListener(this);
                         recyclerView.setAdapter(adapter);
 
-                    }else{
-                        System.out.println(response.errorBody());
                     }
                 } catch (Exception ex) {
+                    Intent intent = new Intent();
+                    intent.putExtra("User", user);
+                    this.finish();
                     ex.printStackTrace();
                 }
             }
@@ -90,17 +87,19 @@ public class MultiplayerActivity extends AppCompatActivity implements ReciclerVi
 
     @Override
     public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position,
-                Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position,
+                Toast.LENGTH_SHORT);
+        toast.show();
 
         game = games.get(position);
-        System.out.println(game.toString());
+        game.setStatus(0);
+        LOGGER.info(game.toString());
         intent = new Intent(getApplicationContext(), StartGameActivity.class);
         intent.putExtra("User", user);
         intent.putExtra("Game", game);
+        toast.cancel();
         startActivity(intent);
         this.finish();
-
     }
 
 

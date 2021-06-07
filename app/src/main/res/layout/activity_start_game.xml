@@ -247,7 +247,7 @@
 
                     <ImageView
                         android:layout_width="105dp"
-                        android:layout_height="80dp"
+                        android:layout_height="130dp"
                         android:layout_weight="1"
                         android:onClick="onClick"
                         android:adjustViewBounds="true"
@@ -256,7 +256,7 @@
                         android:layout_gravity="bottom"/>
                     <ImageView
                         android:layout_width="105dp"
-                        android:layout_height="80dp"
+                        android:layout_height="130dp"
                         android:layout_weight="1"
                         android:onClick="onClick"
                         android:adjustViewBounds="true"
@@ -265,7 +265,7 @@
                         android:layout_gravity="bottom"/>
                     <ImageView
                         android:layout_width="105dp"
-                        android:layout_height="80dp"
+                        android:layout_height="130dp"
                         android:layout_weight="1"
                         android:onClick="onClick"
                         android:adjustViewBounds="true"
@@ -347,7 +347,7 @@
 
                 <ImageView
                     android:layout_width="105dp"
-                    android:layout_height="80dp"
+                    android:layout_height="130dp"
                     android:layout_weight="1"
                     android:onClick="onClick"
                     android:adjustViewBounds="true"
@@ -356,7 +356,7 @@
                     android:layout_gravity="bottom"/>
                 <ImageView
                     android:layout_width="105dp"
-                    android:layout_height="80dp"
+                    android:layout_height="130dp"
                     android:layout_weight="1"
                     android:onClick="onClick"
                     android:adjustViewBounds="true"
@@ -365,7 +365,7 @@
                     android:layout_gravity="bottom"/>
                 <ImageView
                     android:layout_width="105dp"
-                    android:layout_height="80dp"
+                    android:layout_height="130dp"
                     android:layout_weight="1"
                     android:onClick="onClick"
                     android:adjustViewBounds="true"

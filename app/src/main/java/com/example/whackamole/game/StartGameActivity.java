@@ -39,6 +39,8 @@ public class StartGameActivity extends AppCompatActivity {
 
     private final static Logger LOGGER = Logger.getLogger(StartGameActivity.class.getName());
 
+    Toast toast;
+    public Integer status = 0;
     public User user;
     public Game game;
     public String game_type;
@@ -88,13 +90,12 @@ public class StartGameActivity extends AppCompatActivity {
 
         if(getIntent().getExtras() != null) {
             user = (User) getIntent().getSerializableExtra("User");
-            System.out.println(user.toString());
-
-
+            LOGGER.info(user.toString());
 
             game = (Game) getIntent().getSerializableExtra("Game");
+            LOGGER.info(user.toString());
             if(game == null){
-                LOGGER.info("----------------- //Init new individual game");
+                LOGGER.info("Individual game");
                 game= new Game(user.getNickname(), user.getId());
                 Call<Game> call = gameService.doPostGame(game);
 
@@ -105,23 +106,17 @@ public class StartGameActivity extends AppCompatActivity {
                     StrictMode.setThreadPolicy(policy);
 
                     try {
-                        LOGGER.info(call.request().url().toString());
                         Response<Game> response = call.execute();
                         if(response.isSuccessful()){
                             game = response.body();
-                            System.out.println(game.getId());
-                            System.out.println(game);
+                            LOGGER.info(game.toString());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
             }
-
-
-
         }
-
 
         // Get game difficulty Level
         final SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
@@ -165,7 +160,6 @@ public class StartGameActivity extends AppCompatActivity {
         @Override
         public void onFinish() {
             this.cancel();
-            // TODO CAMBIAR MENSAJE
             modalMessage(getString(R.string.str_end_time));
 
         }
@@ -212,6 +206,10 @@ public class StartGameActivity extends AppCompatActivity {
 
         game.setScore(gameScore);
         game.setWinner(user.getNickname());
+
+        if(game.getGuest() == user.getNickname()){
+            game.setStatus(0);
+        }
         LOGGER.info(game.toString());
 
         Call<Game> call = gameService.doPutGame(game.getId(), game);
@@ -238,13 +236,10 @@ public class StartGameActivity extends AppCompatActivity {
 
         Intent intent = new Intent();
         intent.putExtra("User", user);
-//        Intent intent = new Intent(getApplicationContext(), MenuGameActivity.class);
-//        matchTimer.cancel();
-//        startActivity(intent);
+        matchTimer.cancel();
+        toast.cancel();
         this.finish();
-
     }
-
 
     public Runnable gameLoop = new Runnable() { // Game loop run every timeInterval
         @Override
@@ -288,10 +283,10 @@ public class StartGameActivity extends AppCompatActivity {
     }
 
     public void onClick(View v) { //  hit gopher
-        // display message
-         Toast.makeText(v.getContext(),
+         toast = Toast.makeText(v.getContext(),
                 "Hit Registered",
-                Toast.LENGTH_LONG).show();
+                Toast.LENGTH_SHORT);
+         toast.show();
 
         switch(v.getId()) {
             case R.id.imageMole1:
@@ -354,7 +349,7 @@ public class StartGameActivity extends AppCompatActivity {
     // When mole is hit, play sound and update score
     public void directHit(){
         gameMusic(mPlayerWhack);
-        gameScore += 100;
+        gameScore += 10;
         showScore.setText(String.valueOf(gameScore));
     }
 

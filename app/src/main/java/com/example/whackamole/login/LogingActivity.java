@@ -68,7 +68,7 @@ public class LogingActivity extends AppCompatActivity {
                     // display message
                     Toast.makeText(view.getContext(),
                             "WRONG CREDENTIALS",
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
