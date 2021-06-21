@@ -12,9 +12,10 @@ public class Game implements Serializable {
     public Integer status;
     public String created_date;
 
-    public Game(String guest, Integer user_id) {
+    public Game(Integer user_id, String guest,  Integer status) {
         this.guest = guest;
         this.user_id = user_id;
+        this.status = status;
     }
 
     public Integer getId() {
@@ -71,5 +72,18 @@ public class Game implements Serializable {
 
     public void setCreated_date(String created_date) {
         this.created_date = created_date;
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "id=" + id +
+                ", guest='" + guest + '\'' +
+                ", user_id=" + user_id +
+                ", winner='" + winner + '\'' +
+                ", score=" + score +
+                ", status=" + status +
+                ", created_date='" + created_date + '\'' +
+                '}';
     }
 }

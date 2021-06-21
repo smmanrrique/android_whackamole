@@ -43,13 +43,12 @@ public class MultiplayerNewActivity extends AppCompatActivity implements Recicle
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer);
 
-        LOGGER.info("ESTOY AQUI ---------------------------------??? ");
         if(getIntent().getExtras() != null) {
             user = (User) getIntent().getSerializableExtra("User");
             LOGGER.info(user.toString());
 
             /// Get match
-            Call<List<Score>> call = gameService.doGetScores();
+            Call<List<Score>> call = gameService.getScores(user.getNickname());
 
             int SDK_INT = android.os.Build.VERSION.SDK_INT;
             if (SDK_INT > 8){
@@ -59,22 +58,15 @@ public class MultiplayerNewActivity extends AppCompatActivity implements Recicle
 
                 try {
                     Response<List<Score>> response = call.execute();
+                    LOGGER.info(call.request().url().toString());
                     if(response.isSuccessful()){
                         scores = response.body();
-
-                        if(scores.size() < 1){
-                            Intent intent = new Intent();
-                            intent.putExtra("User", user);
-                            this.finish();
-
-                        }
 
                         // data to populate the RecyclerView with
                         ArrayList<String> games_show = new ArrayList<>();
                         for (Score s : scores) {
-                            if (s.getNickname() != user.getNickname()){
-                                games_show.add("Send Request:"+s.getNickname());
-                            }
+                            LOGGER.info(s.toString());
+                            games_show.add(s.getNickname());
                         }
 
                         // set up the RecyclerView
@@ -102,9 +94,12 @@ public class MultiplayerNewActivity extends AppCompatActivity implements Recicle
         toast.show();
         // Get name user guest
         String guest = scores.get(position).getNickname();
-        game = new Game(guest, user.getId());
-        game.setStatus(1);
+        game = new Game( user.getId(), guest,1);
+
         Call<Game> call = gameService.doPostGame(game);
+        LOGGER.info("------------- GAME ---------------------------- ");
+        LOGGER.info(game.toString());
+        LOGGER.info("------------- GAME ---------------------------- ");
 
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8){
@@ -119,9 +114,6 @@ public class MultiplayerNewActivity extends AppCompatActivity implements Recicle
                     LOGGER.info(game.toString());
                 }
             } catch (Exception ex) {
-                Intent intent = new Intent();
-                intent.putExtra("User", user);
-                this.finish();
                 ex.printStackTrace();
             }
         }

@@ -19,6 +19,10 @@ public interface GameService {
     @GET(API_ROUTE+"scores")
     Call<List<Score>> doGetScores();
 
+
+    @GET(API_ROUTE+"users/{nickname}")
+    Call<List<Score>> getScores(@Path("nickname") String nickname);
+
     @GET(API_ROUTE)
     Call<List<Game>> getGames();
 

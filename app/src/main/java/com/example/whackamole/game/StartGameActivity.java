@@ -89,14 +89,17 @@ public class StartGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_game);
 
         if(getIntent().getExtras() != null) {
+            LOGGER.info("------------- NEW GAME ---------------------------- ");
             user = (User) getIntent().getSerializableExtra("User");
+            LOGGER.info("------------- USER ---------------------------- ");
             LOGGER.info(user.toString());
 
             game = (Game) getIntent().getSerializableExtra("Game");
-            LOGGER.info(user.toString());
             if(game == null){
                 LOGGER.info("Individual game");
-                game= new Game(user.getNickname(), user.getId());
+                game= new Game( user.getId(), user.getNickname(), 0);
+                LOGGER.info("------------- GAME ---------------------------- ");
+                LOGGER.info(game.toString());
                 Call<Game> call = gameService.doPostGame(game);
 
                 int SDK_INT = android.os.Build.VERSION.SDK_INT;
@@ -109,12 +112,16 @@ public class StartGameActivity extends AppCompatActivity {
                         Response<Game> response = call.execute();
                         if(response.isSuccessful()){
                             game = response.body();
+                            game.setStatus(0);
                             LOGGER.info(game.toString());
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
+            }else{
+                LOGGER.info("------------- GAME ---------------------------- ");
+                LOGGER.info(game.toString());
             }
         }
 
@@ -173,14 +180,14 @@ public class StartGameActivity extends AppCompatActivity {
             if ((currentTime%5 == 0) &&  (currentTime != 60)){
                 switch(gameLevel) {
                     case "Easy":
-                        timeInterval *= 0.99;
-                        gopherWaitTime *= 0.99;
+                        timeInterval *= 0.98;
+                        gopherWaitTime *= 0.98;
                     case "Medium":
-                        timeInterval *= 0.97;
-                        gopherWaitTime *= 0.97;
-                    case "Hard":
                         timeInterval *= 0.95;
                         gopherWaitTime *= 0.95;
+                    case "Hard":
+                        timeInterval *= 0.92;
+                        gopherWaitTime *= 0.92;
                 }
             }
         }
@@ -209,6 +216,10 @@ public class StartGameActivity extends AppCompatActivity {
 
         if(game.getGuest() == user.getNickname()){
             game.setStatus(0);
+        }
+
+        if(gameScore == 0 & game.getWinner() == null ){
+            game.setWinner(user.getNickname());
         }
         LOGGER.info(game.toString());
 
@@ -344,6 +355,7 @@ public class StartGameActivity extends AppCompatActivity {
                 }
                 break;
         }
+        toast.cancel();
     }
 
     // When mole is hit, play sound and update score
@@ -361,9 +373,6 @@ public class StartGameActivity extends AppCompatActivity {
         }
         music.start();
     }
-
-
-
 
 
 }
